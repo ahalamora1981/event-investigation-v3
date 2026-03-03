@@ -26,10 +26,10 @@ export const translations = {
       notionalValue: '名义价值',
       endOfTimeline: '追踪时间线结束',
     },
-    sidebar: {
+sidebar: {
 
       participants: '订单',
-      participantsPlaceholder: '例如：张三，交易员 A',
+      participantsPlaceholder: '请输入订单编号',
       tradeIdAsset: '交易 ID / 资产',
       tradeIdPlaceholder: '例如：TRD-9921-AAPL',
       fromDate: '从',
@@ -93,10 +93,10 @@ export const translations = {
       notionalValue: 'Notional Value',
       endOfTimeline: 'End of tracked timeline',
     },
-    sidebar: {
+sidebar: {
       searchContext: 'Search & Context',
-      participants: 'Participants',
-      participantsPlaceholder: 'e.g. John Doe, Trader A',
+      participants: 'Order',
+      participantsPlaceholder: 'Enter order ID',
       tradeIdAsset: 'Trade ID / Asset',
       tradeIdPlaceholder: 'e.g. TRD-9921-AAPL',
       fromDate: 'From',
