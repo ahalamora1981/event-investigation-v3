@@ -16,41 +16,47 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const channelConfig = {
-  phone: { icon: Phone, bg: 'bg-blue-100', text: 'text-blue-600', border: 'border-blue-200' },
-  bt: { icon: Headphones, bg: 'bg-orange-100', text: 'text-orange-600', border: 'border-orange-200' },
-  qtrade: { icon: MessageSquare, bg: 'bg-teal-100', text: 'text-teal-600', border: 'border-teal-200' },
-  ideal: { icon: Zap, bg: 'bg-indigo-100', text: 'text-indigo-600', border: 'border-indigo-200' },
-  email: { icon: Mail, bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200' },
-  meeting: { icon: Users, bg: 'bg-purple-100', text: 'text-purple-600', border: 'border-purple-200' },
+  phone: { icon: Phone, bg: 'bg-blue-100', text: 'text-blue-600', border: 'border-blue-200', darkBg: 'bg-blue-900/50', darkText: 'text-blue-400', darkBorder: 'border-blue-800' },
+  bt: { icon: Headphones, bg: 'bg-orange-100', text: 'text-orange-600', border: 'border-orange-200', darkBg: 'bg-orange-900/50', darkText: 'text-orange-400', darkBorder: 'border-orange-800' },
+  qtrade: { icon: MessageSquare, bg: 'bg-teal-100', text: 'text-teal-600', border: 'border-teal-200', darkBg: 'bg-teal-900/50', darkText: 'text-teal-400', darkBorder: 'border-teal-800' },
+  ideal: { icon: Zap, bg: 'bg-indigo-100', text: 'text-indigo-600', border: 'border-indigo-200', darkBg: 'bg-indigo-900/50', darkText: 'text-indigo-400', darkBorder: 'border-indigo-800' },
+  email: { icon: Mail, bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', darkBg: 'bg-slate-800', darkText: 'text-slate-400', darkBorder: 'border-slate-700' },
+  meeting: { icon: Users, bg: 'bg-purple-100', text: 'text-purple-600', border: 'border-purple-200', darkBg: 'bg-purple-900/50', darkText: 'text-purple-400', darkBorder: 'border-purple-800' },
 };
 
 const riskConfig = {
-  high: { labelKey: 'riskLevels.high', bg: 'bg-rose-50', text: 'text-rose-700', badgeBg: 'bg-rose-100', border: 'border-rose-200', line: 'bg-rose-500' },
-  medium: { labelKey: 'riskLevels.medium', bg: 'bg-amber-50', text: 'text-amber-700', badgeBg: 'bg-amber-100', border: 'border-amber-200', line: 'bg-amber-500' },
-  low: { labelKey: 'riskLevels.low', bg: 'bg-emerald-50', text: 'text-emerald-700', badgeBg: 'bg-emerald-100', border: 'border-emerald-200', line: 'bg-emerald-500' },
+  high: { labelKey: 'riskLevels.high', bg: 'bg-rose-50', text: 'text-rose-700', badgeBg: 'bg-rose-100', border: 'border-rose-200', line: 'bg-rose-500', darkBg: 'bg-rose-900/30', darkText: 'text-rose-400', darkBadgeBg: 'bg-rose-900/50', darkBorder: 'border-rose-800', darkLine: 'bg-rose-500' },
+  medium: { labelKey: 'riskLevels.medium', bg: 'bg-amber-50', text: 'text-amber-700', badgeBg: 'bg-amber-100', border: 'border-amber-200', line: 'bg-amber-500', darkBg: 'bg-amber-900/30', darkText: 'text-amber-400', darkBadgeBg: 'bg-amber-900/50', darkBorder: 'border-amber-800', darkLine: 'bg-amber-500' },
+  low: { labelKey: 'riskLevels.low', bg: 'bg-emerald-50', text: 'text-emerald-700', badgeBg: 'bg-emerald-100', border: 'border-emerald-200', line: 'bg-emerald-500', darkBg: 'bg-emerald-900/30', darkText: 'text-emerald-400', darkBadgeBg: 'bg-emerald-900/50', darkBorder: 'border-emerald-800', darkLine: 'bg-emerald-500' },
 };
 
-function ContentLines({ content }) {
+function ContentLines({ content, isDark }) {
   const [expanded, setExpanded] = useState(false);
   const { t } = useLanguage();
   
   const lines = content.split('\n').filter(line => line.trim());
 
+  const contentBg = isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50/50 border-slate-100';
+  const textColor = isDark ? 'text-slate-300' : 'text-slate-600';
+  const timestampColor = isDark ? 'text-slate-500' : 'text-slate-400';
+  const speakerColor = isDark ? 'text-indigo-400' : 'text-indigo-600';
+
   return (
     <div className="mt-3">
       {expanded ? (
         <>
-          <div className="text-sm text-slate-600 leading-relaxed font-mono bg-slate-50/50 p-3 rounded border border-slate-100 space-y-1">
+          <div className={`text-sm ${textColor} leading-relaxed font-mono p-3 rounded border ${contentBg} space-y-1`}>
             {lines.map((line, idx) => {
               const match = line.match(/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[(.*?)\] (.*)$/);
               if (match) {
                 const [, timestamp, speaker, text] = match;
                 return (
                   <div key={idx} className="flex items-start gap-2">
-                    <span className="text-xs text-slate-400 whitespace-nowrap">{timestamp}</span>
-                    <span className="text-xs font-semibold text-indigo-600 whitespace-nowrap">[{speaker}]</span>
+                    <span className={`text-xs ${timestampColor} whitespace-nowrap`}>{timestamp}</span>
+                    <span className={`text-xs font-semibold ${speakerColor} whitespace-nowrap`}>[{speaker}]</span>
                     <span className="flex-1">{text}</span>
                   </div>
                 );
@@ -60,7 +66,7 @@ function ContentLines({ content }) {
           </div>
           <button
             onClick={() => setExpanded(false)}
-            className="mt-2 flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+            className="mt-2 flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-400 font-medium transition-colors"
           >
             <ChevronUp className="w-3 h-3" />
             {t('timeline.collapseContent')}
@@ -69,7 +75,7 @@ function ContentLines({ content }) {
       ) : (
         <button
           onClick={() => setExpanded(true)}
-          className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+          className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-400 font-medium transition-colors"
         >
           <ChevronDown className="w-3 h-3" />
           {t('timeline.expandContent')} ({lines.length})
@@ -79,8 +85,22 @@ function ContentLines({ content }) {
   );
 }
 
-function Timeline({ events, loading }) {
+function Timeline({ events, loading, contentTheme = 'light' }) {
   const { t, getChannelLabel } = useLanguage();
+  const isDark = contentTheme === 'dark';
+
+  const cardBg = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200';
+  const cardText = isDark ? 'text-slate-200' : 'text-slate-800';
+  const subText = isDark ? 'text-slate-400' : 'text-slate-500';
+  const dotBorder = isDark ? 'border-slate-800' : 'border-white';
+  const lineColor = isDark ? '#334e2e8155' : '#f0';
+  const emptyBg = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-dashed border-slate-300';
+  const emptyText = isDark ? 'text-slate-400' : 'text-slate-500';
+  const contentBg = isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-50 border-slate-100';
+  const participantText = isDark ? 'text-slate-300' : 'text-slate-700';
+  const labelColor = isDark ? 'text-slate-500' : 'text-slate-400';
+  const separatorColor = isDark ? 'text-slate-600' : 'text-slate-300';
+  const borderColor = isDark ? 'border-slate-600' : 'border-slate-100';
 
   if (loading) {
     return (
@@ -98,8 +118,8 @@ function Timeline({ events, loading }) {
     return (
       <div className="flex-1 overflow-y-auto px-8 py-8 relative">
         <div className="max-w-4xl mx-auto">
-          <div className="ml-16 bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center text-slate-500">
-            <Info className="w-8 h-8 mx-auto mb-3 text-slate-400" />
+          <div className={`ml-16 p-8 rounded-xl border border-dashed text-center ${emptyBg} ${emptyText}`}>
+            <Info className="w-8 h-8 mx-auto mb-3" />
             <p>{t('timeline.noEvents')}</p>
           </div>
         </div>
@@ -115,6 +135,14 @@ function Timeline({ events, loading }) {
           const risk = riskConfig[event.risk] || riskConfig.low;
           const Icon = channel.icon;
           
+          const eventChannel = isDark 
+            ? { bg: channel.darkBg, text: channel.darkText, border: channel.darkBorder }
+            : { bg: channel.bg, text: channel.text, border: channel.border };
+          
+          const eventRisk = isDark
+            ? { bg: risk.darkBg, text: risk.darkText, badgeBg: risk.darkBadgeBg, border: risk.darkBorder, line: risk.darkLine, labelKey: risk.labelKey }
+            : { bg: risk.bg, text: risk.text, badgeBg: risk.badgeBg, border: risk.border, line: risk.line, labelKey: risk.labelKey };
+
           const dateObj = new Date(event.timestamp);
           const dateStr = format(dateObj, 'MMM d, yyyy');
           const timeStr = format(dateObj, 'HH:mm:ss');
@@ -122,37 +150,37 @@ function Timeline({ events, loading }) {
           return (
             <div key={event.id} className="relative mb-8 flex items-start w-full group">
               <div
-                className={`absolute left-[10px] w-8 h-8 rounded-full border-4 border-white ${channel.bg} flex items-center justify-center z-10 shadow-sm transition-transform group-hover:scale-110`}
+                className={`absolute left-[10px] w-8 h-8 rounded-full border-4 ${dotBorder} ${eventChannel.bg} flex items-center justify-center z-10 shadow-sm transition-transform group-hover:scale-110`}
               >
-                <Icon className={`w-3.5 h-3.5 ${channel.text}`} />
+                <Icon className={`w-3.5 h-3.5 ${eventChannel.text}`} />
               </div>
 
-              <div className="ml-16 w-full bg-white rounded-xl border border-slate-200 p-5 shadow-sm card-hover-effect relative">
+              <div className={`ml-16 w-full rounded-xl border p-5 shadow-sm card-hover-effect relative ${cardBg}`}>
                 <div
-                  className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${risk.line}`}
+                  className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${eventRisk.line}`}
                 ></div>
 
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <div className="flex items-center space-x-2 mb-1">
-                      <span className={`text-xs font-bold uppercase tracking-wider ${channel.text}`}>
+                      <span className={`text-xs font-bold uppercase tracking-wider ${eventChannel.text}`}>
                         {getChannelLabel(event.channel)}
                       </span>
-                      <span className="text-slate-300">&bull;</span>
-                      <span className="text-xs font-medium text-slate-500">
+                      <span className={separatorColor}>&bull;</span>
+                      <span className={`text-xs font-medium ${subText}`}>
                         {dateStr} - {timeStr}
                       </span>
                     </div>
-                    <h4 className="text-sm font-semibold text-slate-800">{event.subject}</h4>
+                    <h4 className={`text-sm font-semibold ${cardText}`}>{event.subject}</h4>
                   </div>
                   <div className="flex flex-col items-end space-y-2">
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${risk.badgeBg} ${risk.text} ${risk.border}`}
+                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${eventRisk.badgeBg} ${eventRisk.text} ${eventRisk.border}`}
                     >
-                      {t(risk.labelKey)}
+                      {t(eventRisk.labelKey)}
                     </span>
                     {event.duration && (
-                      <span className="flex items-center text-xs text-slate-400">
+                      <span className={`flex items-center text-xs ${subText}`}>
                         <Clock className="w-3 h-3 mr-1" />
                         {event.duration}
                       </span>
@@ -160,34 +188,42 @@ function Timeline({ events, loading }) {
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-lg p-3 mb-3 border border-slate-100 flex items-center space-x-3">
+                <div className={`rounded-lg p-3 mb-3 border flex items-center space-x-3 ${contentBg}`}>
                   <div className="flex-1">
-                    <p className="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-0.5">{t('timeline.from')}</p>
-                    <p className="text-sm font-medium text-slate-700">{event.participants.from}</p>
+                    <p className={`text-[10px] uppercase font-bold tracking-wider mb-0.5 ${labelColor}`}>{t('timeline.from')}</p>
+                    <p className={`text-sm font-medium ${participantText}`}>{event.participants.from}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400" />
+                  <ArrowRight className={`w-4 h-4 ${subText}`} />
                   <div className="flex-1">
-                    <p className="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-0.5">{t('timeline.to')}</p>
-                    <p className="text-sm font-medium text-slate-700">{event.participants.to}</p>
+                    <p className={`text-[10px] uppercase font-bold tracking-wider mb-0.5 ${labelColor}`}>{t('timeline.to')}</p>
+                    <p className={`text-sm font-medium ${participantText}`}>{event.participants.to}</p>
                   </div>
                 </div>
 
-                <ContentLines content={event.content} />
+                <ContentLines content={event.content} isDark={isDark} />
 
                 {event.indicators && event.indicators.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2 pt-3 border-t border-slate-100">
+                  <div className={`mt-4 flex flex-wrap gap-2 pt-3 border-t ${borderColor}`}>
                     {event.indicators.map((indicator, idx) => {
-                      let colorClass = 'bg-slate-100 text-slate-600 border-slate-200';
+                      let colorClass = isDark 
+                        ? 'bg-slate-700 text-slate-300 border-slate-600'
+                        : 'bg-slate-100 text-slate-600 border-slate-200';
                       let IconComponent = Info;
                       
                       if (indicator.type === 'danger') {
-                        colorClass = 'bg-rose-50 text-rose-700 border-rose-200';
+                        colorClass = isDark
+                          ? 'bg-rose-900/50 text-rose-400 border-rose-700'
+                          : 'bg-rose-50 text-rose-700 border-rose-200';
                         IconComponent = AlertTriangle;
                       } else if (indicator.type === 'warning') {
-                        colorClass = 'bg-amber-50 text-amber-700 border-amber-200';
+                        colorClass = isDark
+                          ? 'bg-amber-900/50 text-amber-400 border-amber-700'
+                          : 'bg-amber-50 text-amber-700 border-amber-200';
                         IconComponent = AlertCircle;
                       } else if (indicator.type === 'info') {
-                        colorClass = 'bg-blue-50 text-blue-700 border-blue-200';
+                        colorClass = isDark
+                          ? 'bg-blue-900/50 text-blue-400 border-blue-700'
+                          : 'bg-blue-50 text-blue-700 border-blue-200';
                         IconComponent = Info;
                       }
 
@@ -210,8 +246,8 @@ function Timeline({ events, loading }) {
       </div>
 
       <div className="max-w-4xl mx-auto relative mt-8 flex items-center">
-        <div className="absolute left-[16px] w-4 h-4 bg-slate-200 rounded-full border-4 border-white z-10"></div>
-        <div className="ml-16 text-sm text-slate-400 font-medium">{t('header.endOfTimeline')}</div>
+        <div className={`absolute left-[16px] w-4 h-4 rounded-full border-4 ${dotBorder} z-10`} style={{ backgroundColor: isDark ? '#475569' : '#e2e8f0' }}></div>
+        <div className={`ml-16 text-sm font-medium ${subText}`}>{t('header.endOfTimeline')}</div>
       </div>
 
       <style>{`
@@ -222,7 +258,7 @@ function Timeline({ events, loading }) {
           bottom: 0;
           left: 24px;
           width: 2px;
-          background: #e2e8f0;
+          background: ${lineColor};
           z-index: 0;
         }
         
@@ -232,7 +268,7 @@ function Timeline({ events, loading }) {
         .card-hover-effect:hover {
           transform: translateY(-2px);
           box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-          border-color: #c7d2fe;
+          ${isDark ? 'border-color: #4338ca;' : 'border-color: #c7d2fe;'}
         }
       `}</style>
     </div>

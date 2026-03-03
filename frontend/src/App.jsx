@@ -3,8 +3,10 @@ import Sidebar from './components/Sidebar';
 import Timeline from './components/Timeline';
 import { Header, TriggerEventBanner } from './components/Header';
 import { eventsApi, riskLevelsApi } from './api';
+import { useTheme } from './contexts/ThemeContext';
 
 function App() {
+  const { contentTheme } = useTheme();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [riskStats, setRiskStats] = useState({ stats: { high: 0, medium: 0, low: 0 }, total: 0 });
@@ -64,10 +66,10 @@ function App() {
     <div className="flex h-screen overflow-hidden text-slate-800">
       <Sidebar filters={filters} onFilterChange={setFilters} riskStats={riskStats} />
       
-      <main className="flex-1 flex flex-col h-full relative bg-slate-100">
-        <Header />
-        <TriggerEventBanner />
-        <Timeline events={events} loading={loading} />
+      <main className={`flex-1 flex flex-col h-full relative ${contentTheme === 'dark' ? 'bg-slate-900' : 'bg-slate-100'}`}>
+        <Header contentTheme={contentTheme} />
+        <TriggerEventBanner contentTheme={contentTheme} />
+        <Timeline events={events} loading={loading} contentTheme={contentTheme} />
       </main>
     </div>
   );
