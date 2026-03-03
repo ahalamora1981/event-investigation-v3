@@ -144,12 +144,12 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
                   onClick={() => handleChannelToggle(channel.id)}
                   className={`flex items-center justify-start space-x-2 border rounded-lg py-2 px-3 transition-colors ${
                     isActive
-                      ? 'bg-indigo-500/10 border-indigo-300/30'
-                      : 'bg-slate-800 border border-slate-600'
+                      ? 'bg-teal-500/10 border-teal-500'
+                      : 'bg-slate-800/50 border-teal-500'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? channel.color : 'text-slate-400'}`} />
-                  <span className={`text-xs truncate ${isActive ? 'text-white' : 'text-slate-400'}`}>{getChannelLabel(channel.id)}</span>
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? channel.color : 'text-teal-500/60'}`} />
+                  <span className={`text-xs truncate ${isActive ? 'text-white' : 'text-teal-500/60'}`}>{getChannelLabel(channel.id)}</span>
                 </button>
               );
             })}
