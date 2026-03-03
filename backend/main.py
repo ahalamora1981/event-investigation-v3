@@ -134,6 +134,7 @@ async def get_risk_stats(
     trade_id: Optional[str] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
+    risk_levels: Optional[str] = None,
     channels: Optional[str] = None
 ):
     try:
@@ -160,6 +161,10 @@ async def get_risk_stats(
         
         if end_date:
             filtered = [r for r in filtered if r["timestamp"] <= end_date]
+        
+        if risk_levels:
+            levels = risk_levels.split(",")
+            filtered = [r for r in filtered if r.get("risk") in levels]
         
         if channels:
             channel_list = channels.split(",")

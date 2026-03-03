@@ -6,7 +6,7 @@ const channels = [
   { id: 'bt', icon: Headphones, color: 'text-orange-400' },
   { id: 'qtrade', icon: MessageSquare, color: 'text-teal-400' },
   { id: 'ideal', icon: Zap, color: 'text-indigo-400' },
-  { id: 'email', icon: Mail, color: 'text-slate-400' },
+  { id: 'email', icon: Mail, color: 'text-amber-400' },
   { id: 'meeting', icon: Users, color: 'text-purple-400' },
 ];
 
@@ -100,24 +100,35 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wider flex justify-between items-center">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
             {t('sidebar.riskLevel')}
           </h3>
           <div className="flex flex-col space-y-2">
             {riskLevels.map((risk) => (
-              <label key={risk.id} className="flex items-center space-x-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={filters.riskLevels.includes(risk.id)}
-                  onChange={() => handleRiskToggle(risk.id)}
-                  className="form-checkbox h-4 w-4 text-rose-500 rounded border-slate-600 bg-slate-800 focus:ring-rose-500 focus:ring-offset-slate-900"
-                />
-                <div className="flex items-center space-x-2">
-                  <span className={`w-2 h-2 rounded-full ${risk.color}`}></span>
-                  <span className="text-sm text-slate-300 group-hover:text-white transition-colors">{t(risk.labelKey)}</span>
+              <label key={risk.id} className="flex items-center justify-between cursor-pointer group">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={filters.riskLevels.includes(risk.id)}
+                    onChange={() => handleRiskToggle(risk.id)}
+                    className="form-checkbox h-4 w-4 text-rose-500 rounded border-slate-600 bg-slate-800 focus:ring-rose-500 focus:ring-offset-slate-900"
+                  />
+                  <div className="flex items-center space-x-2">
+                    <span className={`w-2 h-2 rounded-full ${risk.color}`}></span>
+                    <span className="text-sm text-slate-300 group-hover:text-white transition-colors">{t(risk.labelKey)}</span>
+                  </div>
                 </div>
+                <span className="text-sm font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700 w-14 text-center">
+                  {riskStats?.stats?.[risk.id] || 0}
+                </span>
               </label>
             ))}
+            <div className="flex items-center justify-between pt-2 mt-2 border-t border-slate-700">
+              <span className="text-sm text-white font-semibold">{t('sidebar.total')}</span>
+              <span className="text-sm font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700 w-14 text-center">
+                {riskStats?.total || 0}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -131,43 +142,17 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
                 <button
                   key={channel.id}
                   onClick={() => handleChannelToggle(channel.id)}
-                  className={`flex items-center justify-center space-x-2 border rounded-lg py-2 px-2 transition-colors ${
+                  className={`flex items-center justify-start space-x-2 border rounded-lg py-2 px-3 transition-colors ${
                     isActive
-                      ? 'bg-slate-700 border-slate-500'
-                      : 'bg-slate-800 border-slate-700 opacity-50 hover:bg-slate-700'
+                      ? 'bg-indigo-500/10 border-indigo-300/30'
+                      : 'bg-slate-800 border border-slate-600'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${channel.color}`} />
-                  <span className="text-xs">{getChannelLabel(channel.id)}</span>
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? channel.color : 'text-slate-400'}`} />
+                  <span className={`text-xs truncate ${isActive ? 'text-white' : 'text-slate-400'}`}>{getChannelLabel(channel.id)}</span>
                 </button>
               );
             })}
-          </div>
-        </div>
-      </div>
-      
-      <div className="p-4 bg-slate-900/50 space-y-3">
-        <h3 className="text-sm font-semibold text-white uppercase tracking-wider">{t('sidebar.riskStats')}</h3>
-        <div className="space-y-2">
-          {riskLevels.map((risk) => (
-            <div
-              key={risk.id}
-              className="flex items-center justify-between bg-slate-800 rounded-lg px-3 py-2 border border-slate-700"
-            >
-              <div className="flex items-center space-x-2">
-                <span className={`w-2 h-2 rounded-full ${risk.color}`}></span>
-                <span className="text-xs text-slate-300">{t(risk.labelKey)}</span>
-              </div>
-              <span className="text-sm font-bold text-white">
-                {riskStats?.stats?.[risk.id] || 0}
-              </span>
-            </div>
-          ))}
-          <div className="flex items-center justify-between bg-slate-700 rounded-lg px-3 py-2 border border-slate-600 mt-2">
-            <span className="text-xs text-white font-semibold">{t('sidebar.total')}</span>
-            <span className="text-sm font-bold text-white">
-              {riskStats?.total || 0}
-            </span>
           </div>
         </div>
       </div>

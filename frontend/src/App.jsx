@@ -48,6 +48,7 @@ function App() {
           tradeId: filters.tradeId,
           startDate: filters.startDate,
           endDate: filters.endDate,
+          riskLevels: filters.riskLevels.join(','),
           channels: filters.channels.join(','),
         });
         setRiskStats(response.data);

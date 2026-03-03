@@ -39,6 +39,7 @@ export const riskLevelsApi = {
     if (params.tradeId) queryParams.append('trade_id', params.tradeId);
     if (params.startDate) queryParams.append('start_date', params.startDate);
     if (params.endDate) queryParams.append('end_date', params.endDate);
+    if (params.riskLevels) queryParams.append('risk_levels', params.riskLevels);
     if (params.channels) queryParams.append('channels', params.channels);
     
     return api.get(`/risk-stats?${queryParams.toString()}`);
