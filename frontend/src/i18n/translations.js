@@ -29,7 +29,7 @@ export const translations = {
 sidebar: {
 
       participants: '订单',
-      participantsPlaceholder: '请输入订单编号',
+      participantsPlaceholder: '输入订单编号',
       tradeIdAsset: '交易 ID / 资产',
       tradeIdPlaceholder: '例如：TRD-9921-AAPL',
       fromDate: '从',
