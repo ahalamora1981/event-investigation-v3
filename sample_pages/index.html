@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esun CCS - Investigation Timeline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+
+        /* Custom Scrollbar for a professional look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 24px;
+            width: 2px;
+            background: #e2e8f0; /* slate-200 */
+            z-index: 0;
+        }
+        
+        .card-hover-effect {
+            transition: all 0.2s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-color: #c7d2fe; /* indigo-200 */
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-slate-800">
+
+    <!-- Sidebar / Filters -->
+    <aside class="w-80 bg-slate-900 text-slate-300 flex flex-col h-full shadow-2xl z-20 flex-shrink-0">
+        <!-- Logo Area -->
+        <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
+            <div class="bg-indigo-500 p-2 rounded-lg text-white">
+                <i data-lucide="shield-alert" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-wide">Esun CCS</h1>
+                <p class="text-xs text-slate-400">Compliance & Surveillance</p>
+            </div>
+        </div>
+
+        <!-- Scrollable Filters Area -->
+        <div class="p-6 flex-1 overflow-y-auto space-y-8">
+            
+            <!-- Search Inputs -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Search & Context</h3>
+                
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Participants</label>
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-500"></i>
+                        <input type="text" id="filter-participant" placeholder="e.g. John Doe, Trader A" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 pl-9 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Trade ID / Asset</label>
+                    <div class="relative">
+                        <i data-lucide="bar-chart-2" class="absolute left-3 top-2.5 w-4 h-4 text-slate-500"></i>
+                        <input type="text" id="filter-trade" value="TRD-9921-AAPL" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 pl-9 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">From</label>
+                        <input type="date" value="2026-02-28" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">To</label>
+                        <input type="date" value="2026-03-02" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Level Filter -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider flex justify-between items-center">
+                    Risk Level
+                    <span class="bg-slate-800 text-xs py-0.5 px-2 rounded-full text-slate-400 border border-slate-700">All</span>
+                </h3>
+                <div class="flex flex-col space-y-2">
+                    <label class="flex items-center space-x-3 cursor-pointer group">
+                        <input type="checkbox" checked value="high" class="risk-filter form-checkbox h-4 w-4 text-rose-500 rounded border-slate-600 bg-slate-800 focus:ring-rose-500 focus:ring-offset-slate-900">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                            <span class="text-sm text-slate-300 group-hover:text-white transition-colors">High Risk</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer group">
+                        <input type="checkbox" checked value="medium" class="risk-filter form-checkbox h-4 w-4 text-amber-500 rounded border-slate-600 bg-slate-800 focus:ring-amber-500 focus:ring-offset-slate-900">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Medium Risk</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer group">
+                        <input type="checkbox" checked value="low" class="risk-filter form-checkbox h-4 w-4 text-emerald-500 rounded border-slate-600 bg-slate-800 focus:ring-emerald-500 focus:ring-offset-slate-900">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Low Risk</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Channel Filter -->
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Channels</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="channel-filter active flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg py-2 px-2 transition-colors" data-channel="phone">
+                        <i data-lucide="phone" class="w-3.5 h-3.5 text-blue-400"></i>
+                        <span class="text-xs">Phone</span>
+                    </button>
+                    <button class="channel-filter active flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg py-2 px-2 transition-colors" data-channel="bt">
+                        <i data-lucide="headphones" class="w-3.5 h-3.5 text-orange-400"></i>
+                        <span class="text-xs">BT Line</span>
+                    </button>
+                    <button class="channel-filter active flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg py-2 px-2 transition-colors" data-channel="qtrade">
+                        <i data-lucide="message-square" class="w-3.5 h-3.5 text-teal-400"></i>
+                        <span class="text-xs">QTrade</span>
+                    </button>
+                    <button class="channel-filter active flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg py-2 px-2 transition-colors" data-channel="ideal">
+                        <i data-lucide="zap" class="w-3.5 h-3.5 text-indigo-400"></i>
+                        <span class="text-xs">iDeal</span>
+                    </button>
+                    <button class="channel-filter active flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg py-2 px-2 transition-colors" data-channel="email">
+                        <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span class="text-xs">Email</span>
+                    </button>
+                    <button class="channel-filter active flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg py-2 px-2 transition-colors" data-channel="meeting">
+                        <i data-lucide="users" class="w-3.5 h-3.5 text-purple-400"></i>
+                        <span class="text-xs">Meeting</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- User Profile Area -->
+        <div class="p-4 border-t border-slate-800 bg-slate-900/50">
+            <div class="flex items-center space-x-3">
+                <img src="https://ui-avatars.com/api/?name=Investigator+Admin&background=4f46e5&color=fff" alt="User" class="w-8 h-8 rounded-full">
+                <div>
+                    <p class="text-sm font-medium text-white">Investigator Admin</p>
+                    <p class="text-xs text-slate-500">ID: INV-4492</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full relative">
+        
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center z-10 sticky top-0 shadow-sm">
+            <div>
+                <div class="flex items-center space-x-3 mb-1">
+                    <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-0.5 rounded-full border border-rose-200">Active Investigation</span>
+                    <h2 class="text-xl font-bold text-slate-800">Case #INV-2026-8891</h2>
+                </div>
+                <p class="text-sm text-slate-500">Suspicious trading pattern detected preceding AAPL earnings announcement.</p>
+            </div>
+            <div class="flex space-x-3">
+                <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center transition-colors">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Report
+                </button>
+                <button class="px-4 py-2 bg-indigo-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-indigo-700 flex items-center shadow-sm transition-colors">
+                    <i data-lucide="lock" class="w-4 h-4 mr-2"></i> Escalate Case
+                </button>
+            </div>
+        </header>
+
+        <!-- Trigger Event Banner -->
+        <div class="bg-slate-50 px-8 py-6 border-b border-slate-200">
+            <div class="bg-white rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-5 flex items-start justify-between">
+                <div class="flex items-start space-x-4">
+                    <div class="bg-indigo-50 p-3 rounded-full mt-1">
+                        <i data-lucide="activity" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Triggering Trade Event</h3>
+                        <p class="text-lg font-bold text-slate-800 mb-2">Block Sell Order Execution: 50,000 AAPL @ Market</p>
+                        <div class="flex flex-wrap gap-3 text-sm">
+                            <span class="flex items-center text-slate-600"><i data-lucide="hash" class="w-4 h-4 mr-1 text-slate-400"></i> TRD-9921-AAPL</span>
+                            <span class="flex items-center text-slate-600"><i data-lucide="user" class="w-4 h-4 mr-1 text-slate-400"></i> Executed by: Trader M. Davis</span>
+                            <span class="flex items-center text-slate-600"><i data-lucide="clock" class="w-4 h-4 mr-1 text-slate-400"></i> Mar 1, 2026 - 14:32:05 EST</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold text-slate-800">~$8.5M</div>
+                    <div class="text-xs text-slate-500 mt-1">Notional Value</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Container -->
+        <div class="flex-1 overflow-y-auto px-8 py-8 relative">
+            <div class="max-w-4xl mx-auto relative timeline-line" id="timeline-container">
+                <!-- JavaScript will populate events here -->
+            </div>
+            
+            <!-- End of timeline marker -->
+            <div class="max-w-4xl mx-auto relative mt-8 flex items-center">
+                 <div class="absolute left-[16px] w-4 h-4 bg-slate-200 rounded-full border-4 border-white z-10"></div>
+                 <div class="ml-16 text-sm text-slate-400 font-medium">End of tracked timeline</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- App Logic -->
+    <script>
+        // Configuration for Channels and Risk Levels to drive UI styling
+        const config = {
+            channels: {
+                phone: { icon: 'phone', label: 'Mobile Phone', bg: 'bg-blue-100', text: 'text-blue-600', border: 'border-blue-200' },
+                bt: { icon: 'headphones', label: 'BT Trading Line', bg: 'bg-orange-100', text: 'text-orange-600', border: 'border-orange-200' },
+                qtrade: { icon: 'message-square', label: 'QTrade Message', bg: 'bg-teal-100', text: 'text-teal-600', border: 'border-teal-200' },
+                ideal: { icon: 'zap', label: 'iDeal Chat', bg: 'bg-indigo-100', text: 'text-indigo-600', border: 'border-indigo-200' },
+                email: { icon: 'mail', label: 'Corporate Email', bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200' },
+                meeting: { icon: 'users', label: 'Calendar Meeting', bg: 'bg-purple-100', text: 'text-purple-600', border: 'border-purple-200' }
+            },
+            risk: {
+                high: { label: 'High Risk', bg: 'bg-rose-50', text: 'text-rose-700', badgeBg: 'bg-rose-100', border: 'border-rose-200' },
+                medium: { label: 'Medium Risk', bg: 'bg-amber-50', text: 'text-amber-700', badgeBg: 'bg-amber-100', border: 'border-amber-200' },
+                low: { label: 'Low Risk', bg: 'bg-emerald-50', text: 'text-emerald-700', badgeBg: 'bg-emerald-100', border: 'border-emerald-200' }
+            }
+        };
+
+        // Mock Data based on the financial investigation scenario
+        const rawEvents = [
+            {
+                id: 1,
+                timestamp: '2026-02-28 09:15:00',
+                channel: 'email',
+                risk: 'low',
+                participants: { from: 'Sarah Jenkins (Research)', to: 'M. Davis (Trader)' },
+                subject: 'FW: AAPL Q1 Earnings Preview - Internal Draft',
+                content: "Attached is the final draft of the earnings preview before we publish to clients tomorrow. Looks like the supply chain issues hit harder than expected.",
+                indicators: [
+                    { type: 'info', label: 'Attachment Detected: PDF' }
+                ]
+            },
+            {
+                id: 2,
+                timestamp: '2026-02-28 10:05:22',
+                channel: 'bt',
+                risk: 'medium',
+                participants: { from: 'M. Davis (Trader)', to: 'External Client Line (Unregistered)' },
+                subject: 'Trading Desk Call',
+                content: "[Audio Transcript] Davis: Hey, did you see the notes I sent over? Client: Yeah, taking a look now. Davis: Might want to reposition before tomorrow's bell. Client: Understood.",
+                duration: '01m 45s',
+                indicators: [
+                    { type: 'warning', label: 'Unregistered Number' },
+                    { type: 'sentiment', label: 'Sentiment: Cautionary' }
+                ]
+            },
+            {
+                id: 3,
+                timestamp: '2026-03-01 11:30:00',
+                channel: 'meeting',
+                risk: 'low',
+                participants: { from: 'M. Davis', to: 'Tech Trading Desk' },
+                subject: 'Daily Strategy Huddle',
+                content: "Routine strategy meeting. Calendar invite shows standard agenda. No anomalous keywords detected in meeting transcription.",
+                duration: '30m 00s',
+                indicators: []
+            },
+            {
+                id: 4,
+                timestamp: '2026-03-01 13:45:10',
+                channel: 'qtrade',
+                risk: 'high',
+                participants: { from: 'M. Davis (Trader)', to: 'Alex R. (Hedge Fund Client)' },
+                subject: 'Direct Message',
+                content: "Davis: Need you to clear out the AAPL blocks we discussed.\nAlex: Are you sure? The street is bullish.\nDavis: I'm sure. The preview is ugly. Off the record.",
+                indicators: [
+                    { type: 'danger', label: 'Lexicon Match: "Off the record"' },
+                    { type: 'danger', label: 'Lexicon Match: "ugly"' }
+                ]
+            },
+            {
+                id: 5,
+                timestamp: '2026-03-01 14:10:05',
+                channel: 'ideal',
+                risk: 'high',
+                participants: { from: 'Alex R.', to: 'M. Davis' },
+                subject: 'Chat Room: Delta Force',
+                content: "Done. Placed the order through the dark pool to avoid spooking the lit market. Call me on the cell.",
+                indicators: [
+                    { type: 'danger', label: 'Lexicon Match: "dark pool"' },
+                    { type: 'warning', label: 'Channel Shift Request: "Call me on the cell"' }
+                ]
+            },
+            {
+                id: 6,
+                timestamp: '2026-03-01 14:15:30',
+                channel: 'phone',
+                risk: 'high',
+                participants: { from: 'M. Davis (Mobile)', to: 'Alex R. (Mobile)' },
+                subject: 'Off-channel Mobile Call',
+                content: "[No transcript available - Call occurred on personal registered mobile device outside firm network. Duration flags anomaly.]",
+                duration: '12m 05s',
+                indicators: [
+                    { type: 'danger', label: 'Off-Channel Communication' },
+                    { type: 'warning', label: 'Proximity to Trade Event (17 mins)' }
+                ]
+            }
+        ];
+
+        // State for filters
+        let activeFilters = {
+            participant: '',
+            risk: ['high', 'medium', 'low'],
+            channels: ['phone', 'bt', 'qtrade', 'ideal', 'email', 'meeting']
+        };
+
+        function renderIndicators(indicators) {
+            if (!indicators || indicators.length === 0) return '';
+            
+            return `
+                <div class="mt-4 flex flex-wrap gap-2 pt-3 border-t border-slate-100">
+                    ${indicators.map(ind => {
+                        let colorClass = 'bg-slate-100 text-slate-600 border-slate-200';
+                        if (ind.type === 'danger') colorClass = 'bg-rose-50 text-rose-700 border-rose-200';
+                        if (ind.type === 'warning') colorClass = 'bg-amber-50 text-amber-700 border-amber-200';
+                        if (ind.type === 'info') colorClass = 'bg-blue-50 text-blue-700 border-blue-200';
+                        
+                        return `<span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${colorClass}">
+                            <i data-lucide="${ind.type === 'danger' ? 'alert-triangle' : (ind.type === 'warning' ? 'alert-circle' : 'info')}" class="w-3 h-3 mr-1"></i>
+                            ${ind.label}
+                        </span>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '';
+
+            // Apply filters
+            const filteredEvents = rawEvents.filter(event => {
+                const matchChannel = activeFilters.channels.includes(event.channel);
+                const matchRisk = activeFilters.risk.includes(event.risk);
+                const searchStr = activeFilters.participant.toLowerCase();
+                const matchParticipant = !searchStr || 
+                    event.participants.from.toLowerCase().includes(searchStr) || 
+                    event.participants.to.toLowerCase().includes(searchStr) ||
+                    event.content.toLowerCase().includes(searchStr);
+                
+                return matchChannel && matchRisk && matchParticipant;
+            });
+
+            if (filteredEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="ml-16 bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center text-slate-500">
+                        <i data-lucide="filter" class="w-8 h-8 mx-auto mb-3 text-slate-400"></i>
+                        <p>No communications match the current filter criteria.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filteredEvents.forEach((event, index) => {
+                const ch = config.channels[event.channel];
+                const rk = config.risk[event.risk];
+                
+                // Format Date
+                const dateObj = new Date(event.timestamp);
+                const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const timeStr = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                const cardHTML = `
+                    <div class="relative mb-8 flex items-start w-full group">
+                        
+                        <!-- Timeline Node / Icon -->
+                        <div class="absolute left-[10px] w-8 h-8 rounded-full border-4 border-white ${ch.bg} flex items-center justify-center z-10 shadow-sm transition-transform group-hover:scale-110">
+                            <i data-lucide="${ch.icon}" class="w-3.5 h-3.5 ${ch.text}"></i>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="ml-16 w-full bg-white rounded-xl border border-slate-200 p-5 shadow-sm card-hover-effect relative">
+                            
+                            <!-- Risk Indicator Line (Left Edge) -->
+                            <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${rk.bg.replace('50', '500')}"></div>
+
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <div class="flex items-center space-x-2 mb-1">
+                                        <span class="text-xs font-bold uppercase tracking-wider ${ch.text}">${ch.label}</span>
+                                        <span class="text-slate-300">&bull;</span>
+                                        <span class="text-xs font-medium text-slate-500">${dateStr} - ${timeStr}</span>
+                                    </div>
+                                    <h4 class="text-sm font-semibold text-slate-800">${event.subject}</h4>
+                                </div>
+                                <div class="flex flex-col items-end space-y-2">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${rk.badgeBg} ${rk.text} ${rk.border}">
+                                        ${rk.label}
+                                    </span>
+                                    ${event.duration ? `<span class="flex items-center text-xs text-slate-400"><i data-lucide="clock" class="w-3 h-3 mr-1"></i>${event.duration}</span>` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Participants -->
+                            <div class="bg-slate-50 rounded-lg p-3 mb-3 border border-slate-100 flex items-center space-x-3">
+                                <div class="flex-1">
+                                    <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-0.5">From</p>
+                                    <p class="text-sm font-medium text-slate-700">${event.participants.from}</p>
+                                </div>
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
+                                <div class="flex-1">
+                                    <p class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-0.5">To</p>
+                                    <p class="text-sm font-medium text-slate-700">${event.participants.to}</p>
+                                </div>
+                            </div>
+
+                            <!-- Content Snippet -->
+                            <div class="text-sm text-slate-600 leading-relaxed font-mono bg-slate-50/50 p-3 rounded border border-slate-100 whitespace-pre-wrap">${event.content}</div>
+
+                            <!-- Indicators -->
+                            ${renderIndicators(event.indicators)}
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            });
+
+            // Re-initialize Lucide icons for dynamically added elements
+            lucide.createIcons();
+        }
+
+        // Initialize UI and Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderTimeline();
+
+            // Search input listener
+            document.getElementById('filter-participant').addEventListener('input', (e) => {
+                activeFilters.participant = e.target.value;
+                renderTimeline();
+            });
+
+            // Risk checkbox listeners
+            document.querySelectorAll('.risk-filter').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        if (!activeFilters.risk.includes(e.target.value)) activeFilters.risk.push(e.target.value);
+                    } else {
+                        activeFilters.risk = activeFilters.risk.filter(r => r !== e.target.value);
+                    }
+                    renderTimeline();
+                });
+            });
+
+            // Channel toggle listeners
+            document.querySelectorAll('.channel-filter').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const btnEl = e.currentTarget;
+                    const channel = btnEl.dataset.channel;
+                    
+                    if (btnEl.classList.contains('active')) {
+                        // Deactivate
+                        btnEl.classList.remove('active', 'border-slate-500', 'bg-slate-700');
+                        btnEl.classList.add('border-slate-700', 'opacity-50');
+                        activeFilters.channels = activeFilters.channels.filter(c => c !== channel);
+                    } else {
+                        // Activate
+                        btnEl.classList.add('active', 'border-slate-500', 'bg-slate-700');
+                        btnEl.classList.remove('border-slate-700', 'opacity-50');
+                        if (!activeFilters.channels.includes(channel)) activeFilters.channels.push(channel);
+                    }
+                    renderTimeline();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
