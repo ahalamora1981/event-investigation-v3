@@ -66,7 +66,7 @@ function App() {
     <div className="flex h-screen overflow-hidden text-slate-800">
       <Sidebar filters={filters} onFilterChange={setFilters} riskStats={riskStats} />
       
-      <main className={`flex-1 flex flex-col h-full relative ${contentTheme === 'dark' ? 'bg-slate-900' : 'bg-slate-100'}`}>
+      <main className={`flex-1 flex flex-col h-full relative ${contentTheme === 'dark' ? 'bg-slate-900' : 'bg-slate-200'}`}>
         <Header contentTheme={contentTheme} />
         <TriggerEventBanner contentTheme={contentTheme} />
         <Timeline events={events} loading={loading} contentTheme={contentTheme} />

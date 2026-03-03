@@ -48,10 +48,7 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
 
       <div className="p-6 flex-1 overflow-y-auto space-y-8">
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">{t('sidebar.searchContext')}</h3>
-          
-          <div>
-            <label className="block text-xs text-slate-400 mb-1">{t('sidebar.participants')}</label>
+          <label className="block text-xs text-slate-400 mb-1">{t('sidebar.participants')}</label>
             <div className="relative">
               <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
               <input
@@ -62,22 +59,6 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 pl-9 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
               />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs text-slate-400 mb-1">{t('sidebar.tradeIdAsset')}</label>
-            <div className="relative">
-              <BarChart2 className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
-              <input
-                type="text"
-                value={filters.tradeId}
-                onChange={(e) => onFilterChange({ ...filters, tradeId: e.target.value })}
-                placeholder={t('sidebar.tradeIdPlaceholder')}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 pl-9 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-              />
-            </div>
-          </div>
-
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-xs text-slate-400 mb-1">{t('sidebar.fromDate')}</label>

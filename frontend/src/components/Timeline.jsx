@@ -23,14 +23,14 @@ const channelConfig = {
   bt: { icon: Headphones, bg: 'bg-orange-100', text: 'text-orange-600', border: 'border-orange-200', darkBg: 'bg-orange-900/50', darkText: 'text-orange-400', darkBorder: 'border-orange-800' },
   qtrade: { icon: MessageSquare, bg: 'bg-teal-100', text: 'text-teal-600', border: 'border-teal-200', darkBg: 'bg-teal-900/50', darkText: 'text-teal-400', darkBorder: 'border-teal-800' },
   ideal: { icon: Zap, bg: 'bg-indigo-100', text: 'text-indigo-600', border: 'border-indigo-200', darkBg: 'bg-indigo-900/50', darkText: 'text-indigo-400', darkBorder: 'border-indigo-800' },
-  email: { icon: Mail, bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', darkBg: 'bg-slate-800', darkText: 'text-slate-400', darkBorder: 'border-slate-700' },
+  email: { icon: Mail, bg: 'bg-slate-200', text: 'text-slate-600', border: 'border-slate-300', darkBg: 'bg-slate-800', darkText: 'text-slate-400', darkBorder: 'border-slate-700' },
   meeting: { icon: Users, bg: 'bg-purple-100', text: 'text-purple-600', border: 'border-purple-200', darkBg: 'bg-purple-900/50', darkText: 'text-purple-400', darkBorder: 'border-purple-800' },
 };
 
 const riskConfig = {
-  high: { labelKey: 'riskLevels.high', bg: 'bg-rose-50', text: 'text-rose-700', badgeBg: 'bg-rose-100', border: 'border-rose-200', line: 'bg-rose-500', darkBg: 'bg-rose-900/30', darkText: 'text-rose-400', darkBadgeBg: 'bg-rose-900/50', darkBorder: 'border-rose-800', darkLine: 'bg-rose-500' },
-  medium: { labelKey: 'riskLevels.medium', bg: 'bg-amber-50', text: 'text-amber-700', badgeBg: 'bg-amber-100', border: 'border-amber-200', line: 'bg-amber-500', darkBg: 'bg-amber-900/30', darkText: 'text-amber-400', darkBadgeBg: 'bg-amber-900/50', darkBorder: 'border-amber-800', darkLine: 'bg-amber-500' },
-  low: { labelKey: 'riskLevels.low', bg: 'bg-emerald-50', text: 'text-emerald-700', badgeBg: 'bg-emerald-100', border: 'border-emerald-200', line: 'bg-emerald-500', darkBg: 'bg-emerald-900/30', darkText: 'text-emerald-400', darkBadgeBg: 'bg-emerald-900/50', darkBorder: 'border-emerald-800', darkLine: 'bg-emerald-500' },
+  high: { labelKey: 'riskLevels.high', bg: 'bg-rose-100', text: 'text-rose-700', badgeBg: 'bg-rose-200', border: 'border-rose-300', line: 'bg-rose-500', darkBg: 'bg-rose-900/30', darkText: 'text-rose-400', darkBadgeBg: 'bg-rose-900/50', darkBorder: 'border-rose-800', darkLine: 'bg-rose-500' },
+  medium: { labelKey: 'riskLevels.medium', bg: 'bg-amber-100', text: 'text-amber-700', badgeBg: 'bg-amber-200', border: 'border-amber-300', line: 'bg-amber-500', darkBg: 'bg-amber-900/30', darkText: 'text-amber-400', darkBadgeBg: 'bg-amber-900/50', darkBorder: 'border-amber-800', darkLine: 'bg-amber-500' },
+  low: { labelKey: 'riskLevels.low', bg: 'bg-emerald-100', text: 'text-emerald-700', badgeBg: 'bg-emerald-200', border: 'border-emerald-300', line: 'bg-emerald-500', darkBg: 'bg-emerald-900/30', darkText: 'text-emerald-400', darkBadgeBg: 'bg-emerald-900/50', darkBorder: 'border-emerald-800', darkLine: 'bg-emerald-500' },
 };
 
 function ContentLines({ content, isDark }) {
@@ -39,9 +39,9 @@ function ContentLines({ content, isDark }) {
   
   const lines = content.split('\n').filter(line => line.trim());
 
-  const contentBg = isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-50/50 border-slate-100';
-  const textColor = isDark ? 'text-slate-300' : 'text-slate-600';
-  const timestampColor = isDark ? 'text-slate-500' : 'text-slate-400';
+  const contentBg = isDark ? 'bg-slate-800/50 border-slate-700' : 'bg-slate-200/50 border-slate-300';
+  const textColor = isDark ? 'text-slate-300' : 'text-slate-700';
+  const timestampColor = isDark ? 'text-slate-500' : 'text-slate-500';
   const speakerColor = isDark ? 'text-indigo-400' : 'text-indigo-600';
 
   return (
@@ -89,14 +89,14 @@ function Timeline({ events, loading, contentTheme = 'light' }) {
   const { t, getChannelLabel } = useLanguage();
   const isDark = contentTheme === 'dark';
 
-  const cardBg = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200';
+  const cardBg = isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-300';
   const cardText = isDark ? 'text-slate-200' : 'text-slate-800';
-  const subText = isDark ? 'text-slate-400' : 'text-slate-500';
-  const dotBorder = isDark ? 'border-slate-800' : 'border-white';
+  const subText = isDark ? 'text-slate-400' : 'text-slate-600';
+  const dotBorder = isDark ? 'border-slate-800' : 'border-slate-100';
   const lineColor = isDark ? '#334e2e8155' : '#f0';
-  const emptyBg = isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-dashed border-slate-300';
-  const emptyText = isDark ? 'text-slate-400' : 'text-slate-500';
-  const contentBg = isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-50 border-slate-100';
+  const emptyBg = isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-dashed border-slate-400';
+  const emptyText = isDark ? 'text-slate-400' : 'text-slate-600';
+  const contentBg = isDark ? 'bg-slate-700/50 border-slate-600' : 'bg-slate-200 border-slate-300';
   const participantText = isDark ? 'text-slate-300' : 'text-slate-700';
   const labelColor = isDark ? 'text-slate-500' : 'text-slate-400';
   const separatorColor = isDark ? 'text-slate-600' : 'text-slate-300';

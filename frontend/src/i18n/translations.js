@@ -7,7 +7,7 @@ export const translations = {
     header: {
       activeInvestigation: '活跃调查',
       caseNumber: '案件编号',
-      caseDescription: '检测到 AAPL 财报公布前的可疑交易模式。',
+      caseDescription: '',
       exportReport: '导出报告',
       escalateCase: '升级案件',
       triggeringTradeEvent: '触发交易事件',
@@ -27,8 +27,8 @@ export const translations = {
       endOfTimeline: '追踪时间线结束',
     },
     sidebar: {
-      searchContext: '搜索与上下文',
-      participants: '参与人员',
+
+      participants: '订单',
       participantsPlaceholder: '例如：张三，交易员 A',
       tradeIdAsset: '交易 ID / 资产',
       tradeIdPlaceholder: '例如：TRD-9921-AAPL',
