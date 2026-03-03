@@ -1,7 +1,7 @@
 export const translations = {
   zh: {
     app: {
-      title: 'Esun CCS',
+      title: 'ESUN CCS',
       subtitle: '合规与监控',
     },
     header: {
@@ -11,6 +11,14 @@ export const translations = {
       exportReport: '导出报告',
       escalateCase: '升级案件',
       triggeringTradeEvent: '触发交易事件',
+      orderId: '订单编号',
+      trader: '交易员',
+      productId: '产品编号',
+      productName: '产品名称',
+      amount: '金额',
+      direction: '方向',
+      date: '日期',
+      sell: '卖出',
       blockSellOrder: '大宗卖出订单执行：50,000 AAPL @ 市价',
       tradeId: 'TRD-9921-AAPL',
       executedBy: '交易员：M. Davis',
@@ -42,7 +50,8 @@ export const translations = {
       qtrade: 'QTrade',
       ideal: 'iDeal',
       email: '邮件',
-      meeting: '会议',
+      bloomberg: 'Bloomberg',
+      reuters: 'Reuters',
     },
     timeline: {
       from: '来自',
@@ -59,7 +68,7 @@ export const translations = {
   },
   en: {
     app: {
-      title: 'Esun CCS',
+      title: 'ESUN CCS',
       subtitle: 'Compliance & Surveillance',
     },
     header: {
@@ -69,6 +78,14 @@ export const translations = {
       exportReport: 'Export Report',
       escalateCase: 'Escalate Case',
       triggeringTradeEvent: 'Triggering Trade Event',
+      orderId: 'Order ID',
+      trader: 'Trader',
+      productId: 'Product ID',
+      productName: 'Product Name',
+      amount: 'Amount',
+      direction: 'Direction',
+      date: 'Date',
+      sell: 'Sell',
       blockSellOrder: 'Block Sell Order Execution: 50,000 AAPL @ Market',
       tradeId: 'TRD-9921-AAPL',
       executedBy: 'Executed by: Trader M. Davis',
@@ -95,12 +112,13 @@ export const translations = {
       low: 'Low Risk',
     },
     channels: {
-      phone: '办公电话',
-      bt: '交易电话',
+      phone: 'Office Phone',
+      bt: 'Trading Line',
       qtrade: 'QTrade',
       ideal: 'iDeal',
-      email: '邮件',
-      meeting: '会议',
+      email: 'Email',
+      bloomberg: 'Bloomberg',
+      reuters: 'Reuters',
     },
     timeline: {
       from: 'From',
@@ -124,7 +142,8 @@ export const channelLabels = {
     qtrade: 'QTrade',
     ideal: 'iDeal',
     email: '邮件',
-    meeting: '会议',
+    bloomberg: 'Bloomberg',
+    reuters: 'Reuters',
   },
   en: {
     phone: 'Office Phone',
@@ -132,6 +151,7 @@ export const channelLabels = {
     qtrade: 'QTrade',
     ideal: 'iDeal',
     email: 'Email',
-    meeting: 'Meeting',
+    bloomberg: 'Bloomberg',
+    reuters: 'Reuters',
   },
 };

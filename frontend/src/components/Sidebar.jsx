@@ -1,4 +1,4 @@
-import { Search, BarChart2, ShieldAlert, Phone, Headphones, MessageSquare, Zap, Mail, Users } from 'lucide-react';
+import { Search, BarChart2, ShieldAlert, Phone, Headphones, MessageSquare, Zap, Mail, Radio, Newspaper } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const channels = [
@@ -6,8 +6,9 @@ const channels = [
   { id: 'bt', icon: Headphones, color: 'text-orange-400' },
   { id: 'qtrade', icon: MessageSquare, color: 'text-teal-400' },
   { id: 'ideal', icon: Zap, color: 'text-indigo-400' },
+  { id: 'reuters', icon: Newspaper, color: 'text-rose-400' },
+  { id: 'bloomberg', icon: Radio, color: 'text-cyan-400' },
   { id: 'email', icon: Mail, color: 'text-amber-400' },
-  { id: 'meeting', icon: Users, color: 'text-purple-400' },
 ];
 
 const riskLevels = [

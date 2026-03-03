@@ -16,7 +16,7 @@ function App() {
     startDate: '2026-01-19',
     endDate: '2026-01-20',
     riskLevels: ['high', 'medium', 'low'],
-    channels: ['phone', 'bt', 'qtrade', 'ideal', 'email', 'meeting'],
+    channels: ['phone', 'bt', 'qtrade', 'ideal', 'reuters', 'email', 'bloomberg'],
   });
 
   useEffect(() => {

@@ -106,31 +106,31 @@ function TriggerEventBanner() {
 
   return (
     <div className={`${bannerBg} px-8 py-4 border-b`}>
-      <div className={`${cardBg} rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4 flex items-center justify-between`}>
-        <div className="flex items-center space-x-4">
-          <div className={`${iconBg} p-2.5 rounded-full`}>
+      <div className={`${cardBg} rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4 flex items-center`}>
+        <div className="flex items-center space-x-4 flex-1 min-w-0">
+          <div className={`${iconBg} p-2.5 rounded-full flex-shrink-0`}>
             <Activity className="w-5 h-5 text-indigo-600" />
           </div>
-          <div>
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
               {t('header.triggeringTradeEvent')}
             </h3>
-            <div className="flex items-center gap-4 text-sm">
-              <span className={`font-semibold ${textColor}`}>{t('header.blockSellOrder')}</span>
-              <span className={`flex items-center ${textSecondary}`}>
-                <Hash className="w-3.5 h-3.5 mr-1 text-slate-400" /> {t('header.tradeId')}
-              </span>
-              <span className={`flex items-center ${textSecondary}`}>
-                <User className="w-3.5 h-3.5 mr-1 text-slate-400" /> {t('header.executedBy')}
-              </span>
-              <span className={`flex items-center ${textSecondary}`}>
-                <Clock className="w-3.5 h-3.5 mr-1 text-slate-400" /> {t('header.tradeTime')}
-              </span>
+            <div className={`text-sm whitespace-nowrap overflow-x-auto font-sans`}>
+              <span className="text-slate-300">{t('header.orderId')}:</span> <span className="text-white">TRD-9921</span>
+              <span className="mx-2 text-slate-500">|</span>
+              <span className="text-slate-300">{t('header.trader')}:</span> <span className="text-white">M. Davis</span>
+              <span className="mx-2 text-slate-500">|</span>
+              <span className="text-slate-300">{t('header.productId')}:</span> <span className="text-white">SPX500</span>
+              <span className="mx-2 text-slate-500">|</span>
+              <span className="text-slate-300">{t('header.productName')}:</span> <span className="text-white">S&P 500 Index</span>
+              <span className="mx-2 text-slate-500">|</span>
+              <span className="text-slate-300">{t('header.amount')}:</span> <span className="text-white">8.5M</span>
+              <span className="mx-2 text-slate-500">|</span>
+              <span className="text-slate-300">{t('header.direction')}:</span> <span className="text-white">{t('header.sell')}</span>
+              <span className="mx-2 text-slate-500">|</span>
+              <span className="text-slate-300">{t('header.date')}:</span> <span className="text-white">2026-01-19</span>
             </div>
           </div>
-        </div>
-        <div className="text-right pr-4">
-          <div className={`text-lg font-bold ${textColor}`}>~$8.5M</div>
         </div>
       </div>
     </div>
