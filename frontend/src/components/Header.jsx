@@ -12,10 +12,10 @@ function Header() {
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center z-10 sticky top-0 shadow-sm">
+    <header className="bg-slate-100 border-b border-slate-300 px-8 py-5 flex justify-between items-center z-10 sticky top-0 shadow-sm">
       <div>
         <div className="flex items-center space-x-3 mb-1">
-          <span className="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-0.5 rounded-full border border-rose-200">
+          <span className="bg-rose-200 text-rose-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-rose-300">
             {t('header.activeInvestigation')}
           </span>
           <h2 className="text-xl font-bold text-slate-800">{t('header.caseNumber')} #INV-2026-8891</h2>
@@ -76,7 +76,7 @@ function TriggerEventBanner() {
   const { t } = useLanguage();
 
   return (
-    <div className="bg-slate-50 px-8 py-4 border-b border-slate-200">
+    <div className="bg-slate-200 px-8 py-4 border-b border-slate-300">
       <div className="bg-white rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="bg-indigo-50 p-2.5 rounded-full">

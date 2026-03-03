@@ -64,7 +64,7 @@ function App() {
     <div className="flex h-screen overflow-hidden text-slate-800">
       <Sidebar filters={filters} onFilterChange={setFilters} riskStats={riskStats} />
       
-      <main className="flex-1 flex flex-col h-full relative">
+      <main className="flex-1 flex flex-col h-full relative bg-slate-100">
         <Header />
         <TriggerEventBanner />
         <Timeline events={events} loading={loading} />
