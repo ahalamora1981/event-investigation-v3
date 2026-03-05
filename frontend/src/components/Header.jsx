@@ -118,7 +118,7 @@ function TriggerEventBanner() {
             <div className={`text-sm whitespace-nowrap overflow-x-auto font-sans`}>
               <span className={labelColor}>{t('header.orderId')}:</span> <span className={valueColor}>TRD-9921</span>
               <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.trader')}:</span> <span className={valueColor}>M. Davis</span>
+              <span className={labelColor}>{t('header.trader')}:</span> <span className={valueColor}>{t('header.traderName')}</span>
               <span className={`mx-2 ${separatorColor}`}>|</span>
               <span className={labelColor}>{t('header.productId')}:</span> <span className={valueColor}>SPX500</span>
               <span className={`mx-2 ${separatorColor}`}>|</span>
