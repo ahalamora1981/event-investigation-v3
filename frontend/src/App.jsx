@@ -38,6 +38,13 @@ function App() {
     const fetchEvents = async () => {
       setLoading(true);
       try {
+        // If channels or riskLevels is empty, return empty results
+        if (filters.channels.length === 0 || filters.riskLevels.length === 0) {
+          setEvents([]);
+          setLoading(false);
+          return;
+        }
+        
         const response = await eventsApi.getAll({
           participant: filters.participant,
           tradeId: filters.tradeId,
@@ -61,6 +68,12 @@ function App() {
   useEffect(() => {
     const fetchRiskStats = async () => {
       try {
+        // If channels or riskLevels is empty, return zero stats
+        if (filters.channels.length === 0 || filters.riskLevels.length === 0) {
+          setRiskStats({ stats: { high: 0, medium: 0, low: 0 }, total: 0 });
+          return;
+        }
+        
         const response = await riskLevelsApi.getStats({
           participant: filters.participant,
           tradeId: filters.tradeId,

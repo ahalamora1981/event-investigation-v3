@@ -78,13 +78,19 @@ async def get_events(
         if end_date:
             filtered = [r for r in filtered if r["timestamp"] <= end_date]
         
-        if risk_levels:
-            levels = risk_levels.split(",")
-            filtered = [r for r in filtered if r.get("risk") in levels]
+        if risk_levels is not None:
+            if risk_levels == "":
+                filtered = []
+            else:
+                levels = risk_levels.split(",")
+                filtered = [r for r in filtered if r.get("risk") in levels]
         
-        if channels:
-            channel_list = channels.split(",")
-            filtered = [r for r in filtered if r.get("channel") in channel_list]
+        if channels is not None:
+            if channels == "":
+                filtered = []
+            else:
+                channel_list = channels.split(",")
+                filtered = [r for r in filtered if r.get("channel") in channel_list]
         
         return {"events": filtered, "total": len(filtered)}
     
@@ -130,23 +136,16 @@ async def get_risk_stats(
     trade_number: Optional[str] = None
 ):
     try:
-        # Determine which records file(s) to load based on trade_number
-        records = []
-        if trade_number:
-            # Extract sequence number from trade_number (e.g., TRD20250305-001 -> 001)
-            seq_num = trade_number.split("-")[-1]
-            records_file = f"data/records-{seq_num}.json"
-            with open(records_file, "r", encoding="utf-8") as f:
-                records = json.load(f)
-        else:
-            # Load all records files
-            for i in range(1, 5):
-                records_file = f"data/records-{i:03d}.json"
-                try:
-                    with open(records_file, "r", encoding="utf-8") as f:
-                        records.extend(json.load(f))
-                except FileNotFoundError:
-                    continue
+        # Only load records if trade_number is specified
+        if not trade_number:
+            return {"stats": {"high": 0, "medium": 0, "low": 0}, "total": 0}
+        
+        # Extract sequence number from trade_number (e.g., TRD20250305-001 -> 001)
+        seq_num = trade_number.split("-")[-1]
+        records_file = f"data/records-{seq_num}.json"
+        
+        with open(records_file, "r", encoding="utf-8") as f:
+            records = json.load(f)
         
         filtered = records
         
@@ -169,13 +168,19 @@ async def get_risk_stats(
         if end_date:
             filtered = [r for r in filtered if r["timestamp"] <= end_date]
         
-        if risk_levels:
-            levels = risk_levels.split(",")
-            filtered = [r for r in filtered if r.get("risk") in levels]
+        if risk_levels is not None:
+            if risk_levels == "":
+                filtered = []
+            else:
+                levels = risk_levels.split(",")
+                filtered = [r for r in filtered if r.get("risk") in levels]
         
-        if channels:
-            channel_list = channels.split(",")
-            filtered = [r for r in filtered if r.get("channel") in channel_list]
+        if channels is not None:
+            if channels == "":
+                filtered = []
+            else:
+                channel_list = channels.split(",")
+                filtered = [r for r in filtered if r.get("channel") in channel_list]
         
         stats = {"high": 0, "medium": 0, "low": 0}
         for record in filtered:
