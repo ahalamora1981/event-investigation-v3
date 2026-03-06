@@ -43,10 +43,18 @@ async def get_events(
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
     risk_levels: Optional[str] = None,
-    channels: Optional[str] = None
+    channels: Optional[str] = None,
+    trade_number: Optional[str] = None
 ):
+    # Determine which records file to load based on trade_number
+    records_file = "data/records.json"
+    if trade_number:
+        # Extract sequence number from trade_number (e.g., TRD20250305-001 -> 001)
+        seq_num = trade_number.split("-")[-1]
+        records_file = f"data/records-{seq_num}.json"
+    
     try:
-        with open("data/records.json", "r", encoding="utf-8") as f:
+        with open(records_file, "r", encoding="utf-8") as f:
             records = json.load(f)
         
         filtered = records
@@ -81,28 +89,10 @@ async def get_events(
         return {"events": filtered, "total": len(filtered)}
     
     except FileNotFoundError:
-        logger.error("records.json not found")
+        logger.error(f"{records_file} not found")
         raise HTTPException(status_code=500, detail="Data file not found")
     except Exception as e:
         logger.error(f"Error loading events: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/events/{event_id}")
-async def get_event(event_id: str):
-    try:
-        with open("data/records.json", "r", encoding="utf-8") as f:
-            records = json.load(f)
-        
-        for record in records:
-            if record["id"] == event_id:
-                return record
-        
-        raise HTTPException(status_code=404, detail="Event not found")
-    
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error loading event: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/channels")
@@ -183,6 +173,44 @@ async def get_risk_stats(
         raise HTTPException(status_code=500, detail="Data file not found")
     except Exception as e:
         logger.error(f"Error loading risk stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/trades")
+async def get_trades(trade_number: Optional[str] = None):
+    try:
+        with open("data/trades.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        trades = data.get("trades", [])
+        
+        if trade_number:
+            trades = [t for t in trades if t.get("tradeNumber") == trade_number]
+        
+        return {"trades": trades, "total": len(trades)}
+    
+    except FileNotFoundError:
+        logger.error("trades.json not found")
+        raise HTTPException(status_code=500, detail="Data file not found")
+    except Exception as e:
+        logger.error(f"Error loading trades: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/events/{event_id}")
+async def get_event(event_id: str):
+    try:
+        with open("data/records.json", "r", encoding="utf-8") as f:
+            records = json.load(f)
+        
+        for record in records:
+            if record["id"] == event_id:
+                return record
+        
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error loading event: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-import { Search, BarChart2, ShieldAlert, Phone, Headphones, MessageSquare, Zap, Mail, Radio, Newspaper } from 'lucide-react';
+import { BarChart2, ShieldAlert, Phone, Headphones, MessageSquare, Zap, Mail, Radio, Newspaper } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const channels = [
@@ -17,7 +17,7 @@ const riskLevels = [
   { id: 'low', labelKey: 'riskLevels.low', color: 'bg-emerald-500' },
 ];
 
-function Sidebar({ filters, onFilterChange, riskStats }) {
+function Sidebar({ filters, onFilterChange, riskStats, trades }) {
   const { t, getChannelLabel } = useLanguage();
 
   const handleChannelToggle = (channelId) => {
@@ -34,6 +34,19 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
     onFilterChange({ ...filters, riskLevels: newRisks });
   };
 
+  const filteredTrades = trades.filter((trade) => {
+    if (!filters.startDate && !filters.endDate) return true;
+    
+    if (trade.status === '拟成交' || trade.tradeTime === '未成交') return true;
+    
+    const tradeDate = trade.tradeTime.split(' ')[0];
+    
+    if (filters.startDate && tradeDate < filters.startDate) return false;
+    if (filters.endDate && tradeDate > filters.endDate) return false;
+    
+    return true;
+  });
+
   return (
     <aside className="w-80 bg-slate-900 text-slate-300 flex flex-col h-full shadow-2xl z-20 flex-shrink-0">
       <div className="p-6 border-b border-slate-800 flex items-center space-x-3">
@@ -47,18 +60,20 @@ function Sidebar({ filters, onFilterChange, riskStats }) {
       </div>
 
       <div className="p-6 flex-1 overflow-y-auto space-y-8">
-        <div className="space-y-4">
-          <label className="block text-xs text-slate-400 mb-1">{t('sidebar.participants')}</label>
-            <div className="relative">
-              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
-              <input
-                type="text"
-                value={filters.participant}
-                onChange={(e) => onFilterChange({ ...filters, participant: e.target.value })}
-                placeholder={t('sidebar.participantsPlaceholder')}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 pl-9 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-              />
-            </div>
+        <div className="space-y-3">
+          <label className="block text-xs text-slate-400 mb-1">{t('sidebar.tradeNumber')}</label>
+            <select
+              value={filters.tradeNumber}
+              onChange={(e) => onFilterChange({ ...filters, tradeNumber: e.target.value })}
+              className={`w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors ${
+                filters.tradeNumber ? 'text-white' : 'text-slate-500'
+              }`}
+            >
+              <option value="">{t('sidebar.tradeNumberPlaceholder')}</option>
+              {filteredTrades.map((trade) => (
+                <option key={trade.tradeNumber} value={trade.tradeNumber}>{trade.tradeNumber}</option>
+              ))}
+            </select>
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-xs text-slate-400 mb-1">{t('sidebar.fromDate')}</label>

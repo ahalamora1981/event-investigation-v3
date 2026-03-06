@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Download, Lock, Activity, Hash, User, Clock, ChevronDown, Globe, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { tradesApi } from '../api';
 
 function Header() {
   const { t, language, setLanguage } = useLanguage();
@@ -89,49 +90,105 @@ function Header() {
   );
 }
 
-function TriggerEventBanner() {
+const fieldKeys = [
+  'tradeNumber',
+  'status',
+  'assetClass',
+  'productCode',
+  'productName',
+  'direction',
+  'tradeSize',
+  'price',
+  'tradeTime',
+  'internalTrader',
+  'counterpartyInstitution',
+  'counterparty',
+  'brokerInstitution',
+  'broker',
+  'tradingVenue',
+];
+
+const firstRowFields = fieldKeys.slice(0, 5);
+const secondRowFields = fieldKeys.slice(5, 10);
+const thirdRowFields = fieldKeys.slice(10);
+
+function TriggerEventBanner({ filters }) {
   const { t } = useLanguage();
   const { contentTheme } = useTheme();
+  const [trades, setTrades] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrades = async () => {
+      if (!filters.tradeNumber) {
+        setTrades([]);
+        setLoading(false);
+        return;
+      }
+      
+      setLoading(true);
+      try {
+        const response = await tradesApi.getAll({
+          tradeNumber: filters.tradeNumber,
+        });
+        setTrades(response.data.trades);
+      } catch (error) {
+        console.error('Error fetching trades:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrades();
+  }, [filters.tradeNumber]);
 
   const bannerBg = contentTheme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-200 border-slate-300';
   const cardBg = contentTheme === 'dark' ? 'bg-slate-700' : 'bg-slate-100';
-  const cardBorder = contentTheme === 'dark' ? 'border-slate-600' : 'border-slate-300';
   const textColor = contentTheme === 'dark' ? 'text-slate-200' : 'text-slate-800';
-  const textMuted = contentTheme === 'dark' ? 'text-slate-400' : 'text-slate-600';
-  const textSecondary = contentTheme === 'dark' ? 'text-slate-300' : 'text-slate-600';
-  const iconBg = contentTheme === 'dark' ? 'bg-indigo-900/50' : 'bg-indigo-100';
   const labelColor = contentTheme === 'dark' ? 'text-slate-400' : 'text-slate-600';
-  const valueColor = contentTheme === 'dark' ? 'text-white' : 'text-slate-900';
   const separatorColor = contentTheme === 'dark' ? 'text-slate-500' : 'text-slate-400';
+
+  const renderFieldItem = (fieldKey, trade) => (
+    <div key={fieldKey} className="flex items-center whitespace-nowrap min-w-0">
+      <span className={`${labelColor} text-xs flex-shrink-0`}>{t(`tradeFields.${fieldKey}`)}: </span>
+      <span className={`${textColor} text-xs font-medium ml-1 truncate`} title={trade ? (trade[fieldKey] || '-') : '-'}>
+        {trade ? (trade[fieldKey] || '-') : '-'}
+      </span>
+    </div>
+  );
+
+  const renderRow = (fields, trade, rowIndex) => (
+    <div key={rowIndex} className="grid grid-cols-5 gap-x-4 gap-y-0">
+      {fields.map((key) => (
+        renderFieldItem(key, trade)
+      ))}
+    </div>
+  );
 
   return (
     <div className={`${bannerBg} px-8 py-4 border-b`}>
-      <div className={`${cardBg} rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4 flex items-center`}>
-        <div className="flex items-center space-x-4 flex-1 min-w-0">
-          <div className={`${iconBg} p-2.5 rounded-full flex-shrink-0`}>
-            <Activity className="w-5 h-5 text-indigo-600" />
+      <div className={`${cardBg} rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4`}>
+        {loading ? (
+          <div className="text-sm text-slate-400">加载中...</div>
+        ) : !filters.tradeNumber ? (
+          <div className="space-y-2">
+            {renderRow(firstRowFields, null, 0)}
+            {renderRow(secondRowFields, null, 1)}
+            {renderRow(thirdRowFields, null, 2)}
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-              {t('header.triggeringTradeEvent')}
-            </h3>
-            <div className={`text-sm whitespace-nowrap overflow-x-auto font-sans`}>
-              <span className={labelColor}>{t('header.orderId')}:</span> <span className={valueColor}>TRD-9921</span>
-              <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.trader')}:</span> <span className={valueColor}>{t('header.traderName')}</span>
-              <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.productId')}:</span> <span className={valueColor}>SPX500</span>
-              <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.productName')}:</span> <span className={valueColor}>S&P 500 Index</span>
-              <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.amount')}:</span> <span className={valueColor}>8.5M</span>
-              <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.direction')}:</span> <span className={valueColor}>{t('header.sell')}</span>
-              <span className={`mx-2 ${separatorColor}`}>|</span>
-              <span className={labelColor}>{t('header.date')}:</span> <span className={valueColor}>2026-01-19</span>
-            </div>
+        ) : trades.length === 0 ? (
+          <div className="text-sm text-slate-400">没有符合的交易数据</div>
+        ) : (
+          <div className="space-y-2">
+            {trades.map((trade, tradeIndex) => (
+              <div key={trade.tradeNumber || tradeIndex} className="space-y-2">
+                {renderRow(firstRowFields, trade, 0)}
+                {renderRow(secondRowFields, trade, 1)}
+                {renderRow(thirdRowFields, trade, 2)}
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,72 @@
+{
+  "trades": [
+    {
+      "tradeNumber": "TRD20250305-001",
+      "status": "已成交",
+      "assetClass": "债券",
+      "productCode": "230205",
+      "productName": "23 国开 205",
+      "direction": "卖出",
+      "tradeSize": "5000 万",
+      "price": "2.45%",
+      "tradeTime": "2025-01-15 10:09:22",
+      "internalTrader": "黄金",
+      "counterpartyInstitution": "恒睿资产管理",
+      "counterparty": "周子航",
+      "brokerInstitution": "晋泰证券",
+      "broker": "韩梅梅",
+      "tradingVenue": "场外"
+    },
+    {
+      "tradeNumber": "TRD20250305-002",
+      "status": "拟成交",
+      "assetClass": "债券",
+      "productCode": "250006",
+      "productName": "25 国开 006",
+      "direction": "卖出",
+      "tradeSize": "3000 万",
+      "price": "2.37%-2.38%",
+      "tradeTime": "未成交",
+      "internalTrader": "黄金",
+      "counterpartyInstitution": "恒睿资产管理",
+      "counterparty": "周子航",
+      "brokerInstitution": "晋泰证券",
+      "broker": "韩梅梅",
+      "tradingVenue": "场外"
+    },
+    {
+      "tradeNumber": "TRD20250305-003",
+      "status": "已成交",
+      "assetClass": "期货",
+      "productCode": "AU2406",
+      "productName": "沪金 2406",
+      "direction": "买入",
+      "tradeSize": "1 手",
+      "price": "476.6",
+      "tradeTime": "2025-01-23 13:45:12",
+      "internalTrader": "黄金",
+      "counterpartyInstitution": "泰晤基金",
+      "counterparty": "孙正凯",
+      "brokerInstitution": "无",
+      "broker": "无",
+      "tradingVenue": "交易所"
+    },
+    {
+      "tradeNumber": "TRD20250305-004",
+      "status": "已成交",
+      "assetClass": "期货",
+      "productCode": "SC2406",
+      "productName": "原油 2406",
+      "direction": "买入",
+      "tradeSize": "50 手",
+      "price": "627",
+      "tradeTime": "2025-01-30 13:52:26",
+      "internalTrader": "黄金",
+      "counterpartyInstitution": "泰晤基金",
+      "counterparty": "孙正凯",
+      "brokerInstitution": "晋泰证券",
+      "broker": "韩梅梅",
+      "tradingVenue": "交易所"
+    }
+  ]
+}

@@ -19,6 +19,7 @@ export const eventsApi = {
     if (params.endDate) queryParams.append('end_date', params.endDate);
     if (params.riskLevels) queryParams.append('risk_levels', params.riskLevels);
     if (params.channels) queryParams.append('channels', params.channels);
+    if (params.tradeNumber) queryParams.append('trade_number', params.tradeNumber);
     
     return api.get(`/events?${queryParams.toString()}`);
   },
@@ -41,8 +42,19 @@ export const riskLevelsApi = {
     if (params.endDate) queryParams.append('end_date', params.endDate);
     if (params.riskLevels) queryParams.append('risk_levels', params.riskLevels);
     if (params.channels) queryParams.append('channels', params.channels);
+    if (params.tradeNumber) queryParams.append('trade_number', params.tradeNumber);
     
     return api.get(`/risk-stats?${queryParams.toString()}`);
+  },
+};
+
+export const tradesApi = {
+  getAll: (params = {}) => {
+    const queryParams = new URLSearchParams();
+    
+    if (params.tradeNumber) queryParams.append('trade_number', params.tradeNumber);
+    
+    return api.get(`/trades?${queryParams.toString()}`);
   },
 };
 
