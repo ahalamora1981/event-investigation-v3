@@ -101,10 +101,11 @@ async def get_channels():
         "channels": [
             {"id": "phone", "label": "办公电话", "icon": "phone"},
             {"id": "bt", "label": "交易电话", "icon": "headphones"},
-            {"id": "meeting", "label": "会议", "icon": "users"},
-            {"id": "email", "label": "邮件", "icon": "mail"},
-            {"id": "qtrade", "label": "Qtrade", "icon": "message-square"},
-            {"id": "ideal", "label": "iDeal", "icon": "zap"}
+            {"id": "qtrade", "label": "QTrade", "icon": "message-square"},
+            {"id": "ideal", "label": "iDeal", "icon": "zap"},
+            {"id": "reuters", "label": "Reuters", "icon": "newspaper"},
+            {"id": "bloomberg", "label": "Bloomberg", "icon": "radio"},
+            {"id": "email", "label": "邮件", "icon": "mail"}
         ]
     }
 
@@ -125,11 +126,27 @@ async def get_risk_stats(
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
     risk_levels: Optional[str] = None,
-    channels: Optional[str] = None
+    channels: Optional[str] = None,
+    trade_number: Optional[str] = None
 ):
     try:
-        with open("data/records.json", "r", encoding="utf-8") as f:
-            records = json.load(f)
+        # Determine which records file(s) to load based on trade_number
+        records = []
+        if trade_number:
+            # Extract sequence number from trade_number (e.g., TRD20250305-001 -> 001)
+            seq_num = trade_number.split("-")[-1]
+            records_file = f"data/records-{seq_num}.json"
+            with open(records_file, "r", encoding="utf-8") as f:
+                records = json.load(f)
+        else:
+            # Load all records files
+            for i in range(1, 5):
+                records_file = f"data/records-{i:03d}.json"
+                try:
+                    with open(records_file, "r", encoding="utf-8") as f:
+                        records.extend(json.load(f))
+                except FileNotFoundError:
+                    continue
         
         filtered = records
         
@@ -169,7 +186,7 @@ async def get_risk_stats(
         return {"stats": stats, "total": len(filtered)}
     
     except FileNotFoundError:
-        logger.error("records.json not found")
+        logger.error("Records file not found")
         raise HTTPException(status_code=500, detail="Data file not found")
     except Exception as e:
         logger.error(f"Error loading risk stats: {e}")

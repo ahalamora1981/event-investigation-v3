@@ -59,9 +59,10 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
         </div>
       </div>
 
-      <div className="p-6 flex-1 overflow-y-auto space-y-8">
-        <div className="space-y-3">
-          <label className="block text-xs text-slate-400 mb-1">{t('sidebar.tradeNumber')}</label>
+      <div className="p-6 flex-1 overflow-y-auto space-y-6">
+        <div>
+          <div className="space-y-2">
+            <label className="block text-xs text-slate-400 mb-1">{t('sidebar.tradeNumber')}</label>
             <select
               value={filters.tradeNumber}
               onChange={(e) => onFilterChange({ ...filters, tradeNumber: e.target.value })}
@@ -74,7 +75,8 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
                 <option key={trade.tradeNumber} value={trade.tradeNumber}>{trade.tradeNumber}</option>
               ))}
             </select>
-          <div className="grid grid-cols-2 gap-2">
+          </div>
+          <div className="grid grid-cols-2 gap-2 mt-4">
             <div>
               <label className="block text-xs text-slate-400 mb-1">{t('sidebar.fromDate')}</label>
               <input

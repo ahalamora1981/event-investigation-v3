@@ -3,20 +3,30 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    hostname: frontend
     ports:
       - "8220:80"
     environment:
-      - VITE_API_URL=http://localhost:8210
+      - VITE_API_URL=http://backend:8000/api
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - app-network
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    hostname: backend
     ports:
       - "8210:8000"
     volumes:
       - ./backend/data:/app/data
     restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
