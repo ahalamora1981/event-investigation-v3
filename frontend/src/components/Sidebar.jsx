@@ -27,6 +27,15 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
     onFilterChange({ ...filters, channels: newChannels });
   };
 
+  const handleSelectAllChannels = () => {
+    const allChannelIds = channels.map((c) => c.id);
+    onFilterChange({ ...filters, channels: allChannelIds });
+  };
+
+  const handleClearAllChannels = () => {
+    onFilterChange({ ...filters, channels: [] });
+  };
+
   const handleRiskToggle = (riskId) => {
     const newRisks = filters.riskLevels.includes(riskId)
       ? filters.riskLevels.filter((r) => r !== riskId)
@@ -34,18 +43,7 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
     onFilterChange({ ...filters, riskLevels: newRisks });
   };
 
-  const filteredTrades = trades.filter((trade) => {
-    if (!filters.startDate && !filters.endDate) return true;
-    
-    if (trade.status === '拟成交' || trade.tradeTime === '未成交') return true;
-    
-    const tradeDate = trade.tradeTime.split(' ')[0];
-    
-    if (filters.startDate && tradeDate < filters.startDate) return false;
-    if (filters.endDate && tradeDate > filters.endDate) return false;
-    
-    return true;
-  });
+  const filteredTrades = trades;
 
   return (
     <aside className="w-80 bg-slate-900 text-slate-300 flex flex-col h-full shadow-2xl z-20 flex-shrink-0">
@@ -62,7 +60,9 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
       <div className="p-6 flex-1 overflow-y-auto space-y-6">
         <div>
           <div className="space-y-2">
-            <label className="block text-xs text-slate-400 mb-1">{t('sidebar.tradeNumber')}</label>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+              {t('sidebar.tradeNumber')}
+            </h3>
             <select
               value={filters.tradeNumber}
               onChange={(e) => onFilterChange({ ...filters, tradeNumber: e.target.value })}
@@ -75,26 +75,6 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
                 <option key={trade.tradeNumber} value={trade.tradeNumber}>{trade.tradeNumber}</option>
               ))}
             </select>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            <div>
-              <label className="block text-xs text-slate-400 mb-1">{t('sidebar.fromDate')}</label>
-              <input
-                type="date"
-                value={filters.startDate}
-                onChange={(e) => onFilterChange({ ...filters, startDate: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-400 mb-1">{t('sidebar.toDate')}</label>
-              <input
-                type="date"
-                value={filters.endDate}
-                onChange={(e) => onFilterChange({ ...filters, endDate: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-xs text-white focus:outline-none focus:border-indigo-500"
-              />
-            </div>
           </div>
         </div>
 
@@ -132,6 +112,39 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
         </div>
 
         <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">相关性阈值</h3>
+          <div className="px-1 pt-4">
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max="80"
+                step="10"
+                value={filters.scoreThreshold}
+                onChange={(e) => onFilterChange({ ...filters, scoreThreshold: parseInt(e.target.value) })}
+                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+              />
+              <div
+                className="absolute top-0 transform -translate-x-1/2 -mt-6 bg-indigo-600 text-white text-xs font-bold px-2 py-0.5 rounded shadow-lg"
+                style={{ left: `calc(${(filters.scoreThreshold / 80) * 100}% + 2px)` }}
+              >
+                {filters.scoreThreshold}
+              </div>
+              <div className="flex justify-between mt-1 px-1">
+                {[0, 10, 20, 30, 40, 50, 60, 70, 80].map((tick) => (
+                  <div
+                    key={tick}
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      tick <= filters.scoreThreshold ? 'bg-indigo-500' : 'bg-slate-600'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
           <h3 className="text-sm font-semibold text-white uppercase tracking-wider">{t('sidebar.channels')}</h3>
           <div className="grid grid-cols-2 gap-2">
             {channels.map((channel) => {
@@ -152,6 +165,20 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
                 </button>
               );
             })}
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={handleSelectAllChannels}
+              className="flex-1 text-xs py-1.5 px-3 rounded border border-teal-800 bg-teal-900/20 text-teal-400 hover:bg-teal-900/40 transition-colors"
+            >
+              全选
+            </button>
+            <button
+              onClick={handleClearAllChannels}
+              className="flex-1 text-xs py-1.5 px-3 rounded border border-rose-800 bg-rose-900/20 text-rose-400 hover:bg-rose-900/40 transition-colors"
+            >
+              全不选
+            </button>
           </div>
         </div>
       </div>

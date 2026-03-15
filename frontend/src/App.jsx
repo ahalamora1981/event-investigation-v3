@@ -14,11 +14,10 @@ function App() {
   const [filters, setFilters] = useState({
     participant: '',
     tradeId: '',
-    startDate: '2025-01-01',
-    endDate: '2025-01-31',
     riskLevels: ['high', 'medium', 'low'],
     channels: ['phone', 'bt', 'qtrade', 'ideal', 'reuters', 'email', 'bloomberg'],
     tradeNumber: '',
+    scoreThreshold: 0,
   });
 
   useEffect(() => {
@@ -48,11 +47,10 @@ function App() {
         const response = await eventsApi.getAll({
           participant: filters.participant,
           tradeId: filters.tradeId,
-          startDate: filters.startDate,
-          endDate: filters.endDate,
           riskLevels: filters.riskLevels.join(','),
           channels: filters.channels.join(','),
           tradeNumber: filters.tradeNumber,
+          scoreThreshold: filters.scoreThreshold,
         });
         setEvents(response.data.events);
       } catch (error) {
@@ -77,11 +75,10 @@ function App() {
         const response = await riskLevelsApi.getStats({
           participant: filters.participant,
           tradeId: filters.tradeId,
-          startDate: filters.startDate,
-          endDate: filters.endDate,
           riskLevels: filters.riskLevels.join(','),
           channels: filters.channels.join(','),
           tradeNumber: filters.tradeNumber,
+          scoreThreshold: filters.scoreThreshold,
         });
         setRiskStats(response.data);
       } catch (error) {

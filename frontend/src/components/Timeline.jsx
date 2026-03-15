@@ -104,8 +104,8 @@ function Timeline({ events, loading, contentTheme = 'light' }) {
 
   if (loading) {
     return (
-      <div className="flex-1 overflow-y-auto px-8 py-8 relative">
-        <div className="max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto px-6 py-8 relative">
+        <div className="mx-auto">
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
           </div>
@@ -116,8 +116,8 @@ function Timeline({ events, loading, contentTheme = 'light' }) {
 
   if (events.length === 0) {
     return (
-      <div className="flex-1 overflow-y-auto px-8 py-8 relative">
-        <div className="max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto px-6 py-8 relative">
+        <div className="mx-auto">
           <div className={`ml-16 p-8 rounded-xl border border-dashed text-center ${emptyBg} ${emptyText}`}>
             <Info className="w-8 h-8 mx-auto mb-3" />
             <p>{t('timeline.noEvents')}</p>
@@ -128,8 +128,8 @@ function Timeline({ events, loading, contentTheme = 'light' }) {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto px-8 py-8 relative">
-      <div className="max-w-4xl mx-auto relative timeline-line">
+    <div className="flex-1 overflow-y-auto px-6 py-8 relative">
+      <div className="mx-auto relative timeline-line">
         {events.map((event) => {
           const channel = channelConfig[event.channel] || channelConfig.phone;
           const risk = riskConfig[event.risk] || riskConfig.low;
@@ -148,63 +148,38 @@ function Timeline({ events, loading, contentTheme = 'light' }) {
           const timeStr = format(dateObj, 'HH:mm:ss');
 
           return (
-            <div key={event.id} className="relative mb-8 flex items-start w-full group">
+            <div key={`${event.id}-${event.timestamp}`} className="relative mb-4 flex items-start w-full group">
               <div
                 className={`absolute left-[10px] w-8 h-8 rounded-full border-4 ${dotBorder} ${eventChannel.bg} flex items-center justify-center z-10 shadow-sm transition-transform group-hover:scale-110`}
               >
                 <Icon className={`w-3.5 h-3.5 ${eventChannel.text}`} />
               </div>
 
-              <div className={`ml-16 w-full rounded-xl border p-5 shadow-sm card-hover-effect relative ${cardBg}`}>
+              <div className={`ml-16 w-full rounded-xl border p-3 shadow-sm card-hover-effect relative ${cardBg}`}>
                 <div
                   className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${eventRisk.line}`}
                 ></div>
 
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <div className="flex items-center space-x-2 mb-1">
-                      <span className={`text-xs font-bold uppercase tracking-wider ${eventChannel.text}`}>
-                        {getChannelLabel(event.channel)}
-                      </span>
-                      <span className={separatorColor}>&bull;</span>
-                      <span className={`text-xs font-medium ${subText}`}>
-                        {dateStr} - {timeStr}
-                      </span>
-                    </div>
-                    <h4 className={`text-sm font-semibold ${cardText}`}>{event.subject}</h4>
-                  </div>
-                  <div className="flex flex-col items-end space-y-2">
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${eventRisk.badgeBg} ${eventRisk.text} ${eventRisk.border}`}
-                    >
-                      {t(eventRisk.labelKey)}
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2 flex-1 min-w-0">
+                    <span className={`text-xs font-bold uppercase tracking-wider ${eventChannel.text} flex-shrink-0`}>
+                      {getChannelLabel(event.channel)}
                     </span>
+                    <span className={separatorColor}>&bull;</span>
+                    <span className={`text-xs font-medium ${subText} flex-shrink-0`}>
+                      {dateStr} - {timeStr}
+                    </span>
+                    <span className={separatorColor}>&bull;</span>
+                    <h4 className={`text-sm font-semibold ${cardText} truncate flex-1 min-w-0`}>{event.subject}</h4>
+                  </div>
+                  <div className="flex items-center space-x-2 flex-shrink-0 ml-4">
                     {event.duration && (
                       <span className={`flex items-center text-xs ${subText}`}>
                         <Clock className="w-3 h-3 mr-1" />
                         {event.duration}
                       </span>
                     )}
-                  </div>
-                </div>
-
-                <div className={`rounded-lg p-3 mb-3 border flex items-center space-x-3 ${contentBg}`}>
-                  <div className="flex-1">
-                    <p className={`text-[10px] uppercase font-bold tracking-wider mb-0.5 ${labelColor}`}>{t('timeline.from')}</p>
-                    <p className={`text-sm font-medium ${participantText}`}>{event.participants.from}</p>
-                  </div>
-                  <ArrowRight className={`w-4 h-4 ${subText}`} />
-                  <div className="flex-1">
-                    <p className={`text-[10px] uppercase font-bold tracking-wider mb-0.5 ${labelColor}`}>{t('timeline.to')}</p>
-                    <p className={`text-sm font-medium ${participantText}`}>{event.participants.to}</p>
-                  </div>
-                </div>
-
-                <ContentLines content={event.content} isDark={isDark} />
-
-                {event.indicators && event.indicators.length > 0 && (
-                  <div className={`mt-4 flex flex-wrap gap-2 pt-3 border-t ${borderColor}`}>
-                    {event.indicators.map((indicator, idx) => {
+                    {event.indicators && event.indicators.length > 0 && event.indicators.map((indicator, idx) => {
                       let colorClass = isDark 
                         ? 'bg-slate-700 text-slate-300 border-slate-600'
                         : 'bg-slate-100 text-slate-600 border-slate-200';
@@ -230,22 +205,50 @@ function Timeline({ events, loading, contentTheme = 'light' }) {
                       return (
                         <span
                           key={idx}
-                          className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${colorClass}`}
+                          className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${colorClass}`}
                         >
                           <IconComponent className="w-3 h-3 mr-1" />
                           {indicator.label}
                         </span>
                       );
                     })}
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${eventRisk.badgeBg} ${eventRisk.text} ${eventRisk.border}`}
+                    >
+                      {t(eventRisk.labelKey)}
+                    </span>
+                    <span
+                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${
+                        isDark ? 'bg-slate-700 text-indigo-400 border-slate-600' : 'bg-slate-100 text-indigo-700 border-slate-200'
+                      }`}
+                    >
+                      相关性：{event.totalScore || 0}分
+                    </span>
                   </div>
-                )}
+                </div>
+
+                <div className={`rounded-lg p-2 mb-2 border ${contentBg}`}>
+                  <div className="flex items-center justify-between space-x-4">
+                    <div className="flex-1 min-w-0">
+                      <span className={`text-[10px] uppercase font-bold tracking-wider ${labelColor}`}>From: </span>
+                      <span className={`text-sm font-medium ${participantText} truncate`}>{event.participants.from}</span>
+                    </div>
+                    <ArrowRight className={`w-4 h-4 ${subText} flex-shrink-0`} />
+                    <div className="flex-1 min-w-0">
+                      <span className={`text-[10px] uppercase font-bold tracking-wider ${labelColor}`}>To: </span>
+                      <span className={`text-sm font-medium ${participantText} truncate`}>{event.participants.to}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <ContentLines content={event.content} isDark={isDark} />
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="max-w-4xl mx-auto relative mt-8 flex items-center">
+      <div className="mx-auto relative mt-8 flex items-center">
         <div className={`absolute left-[16px] w-4 h-4 rounded-full border-4 ${dotBorder} z-10`} style={{ backgroundColor: isDark ? '#475569' : '#e2e8f0' }}></div>
         <div className={`ml-16 text-sm font-medium ${subText}`}>{t('header.endOfTimeline')}</div>
       </div>

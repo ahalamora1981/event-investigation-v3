@@ -17,28 +17,18 @@ export function ThemeProvider({ children }) {
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    console.log('Current theme:', theme);
   }, [theme]);
 
   useEffect(() => {
     localStorage.setItem('contentTheme', contentTheme);
-    console.log('Current content theme:', contentTheme);
   }, [contentTheme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => {
-      const newTheme = prev === 'dark' ? 'light' : 'dark';
-      console.log('Switching to theme:', newTheme);
-      return newTheme;
-    });
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   const toggleContentTheme = () => {
-    setContentTheme((prev) => {
-      const newTheme = prev === 'dark' ? 'light' : 'dark';
-      console.log('Switching to content theme:', newTheme);
-      return newTheme;
-    });
+    setContentTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   return (
