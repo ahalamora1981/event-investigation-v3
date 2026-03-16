@@ -57,8 +57,8 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
         </div>
       </div>
 
-      <div className="p-6 flex-1 overflow-y-auto space-y-6">
-        <div>
+      <div className="p-6 flex-1 overflow-y-auto space-y-4">
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
           <div className="space-y-2">
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
               {t('sidebar.tradeNumber')}
@@ -78,7 +78,7 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 space-y-3">
           <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
             {t('sidebar.riskLevel')}
           </h3>
@@ -111,8 +111,8 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
           </div>
         </div>
 
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">相关性阈值</h3>
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 space-y-3">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">记录相关性 (0 ~ 80)</h3>
           <div className="px-1 pt-4">
             <div className="relative">
               <input
@@ -144,7 +144,7 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 space-y-3">
           <h3 className="text-sm font-semibold text-white uppercase tracking-wider">{t('sidebar.channels')}</h3>
           <div className="grid grid-cols-2 gap-2">
             {channels.map((channel) => {
