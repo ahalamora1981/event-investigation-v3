@@ -4,9 +4,12 @@ import Timeline from './components/Timeline';
 import { Header, TriggerEventBanner } from './components/Header';
 import { eventsApi, riskLevelsApi, tradesApi } from './api';
 import { useTheme } from './contexts/ThemeContext';
+import { useLanguage } from './contexts/LanguageContext';
+import { exportReport } from './utils/exportReport';
 
 function App() {
   const { contentTheme } = useTheme();
+  const { t, getChannelLabel } = useLanguage();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [riskStats, setRiskStats] = useState({ stats: { high: 0, medium: 0, low: 0 }, total: 0 });
@@ -19,6 +22,10 @@ function App() {
     tradeNumber: '',
     scoreThreshold: 0,
   });
+
+  const handleExportReport = () => {
+    exportReport(events, filters, 'INV-2026-8891', t, getChannelLabel);
+  };
 
   useEffect(() => {
     const fetchTrades = async () => {
@@ -94,7 +101,7 @@ function App() {
       <Sidebar filters={filters} onFilterChange={setFilters} riskStats={riskStats} trades={trades} />
       
       <main className={`flex-1 flex flex-col h-full relative ${contentTheme === 'dark' ? 'bg-slate-900' : 'bg-slate-200'}`}>
-        <Header contentTheme={contentTheme} />
+        <Header events={events} filters={filters} onExportReport={handleExportReport} />
         <TriggerEventBanner filters={filters} />
         <Timeline events={events} loading={loading} contentTheme={contentTheme} />
       </main>

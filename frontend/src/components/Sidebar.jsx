@@ -112,7 +112,7 @@ function Sidebar({ filters, onFilterChange, riskStats, trades }) {
         </div>
 
         <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 space-y-3">
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">记录相关性 (0 ~ 80)</h3>
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">相关性下限</h3>
           <div className="px-1 pt-4">
             <div className="relative">
               <input

@@ -3,11 +3,21 @@ import { Download, Lock, Activity, Hash, User, Clock, ChevronDown, Globe, Sun, M
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { tradesApi } from '../api';
+import { exportReport } from '../utils/exportReport';
 
-function Header() {
-  const { t, language, setLanguage } = useLanguage();
+function Header({ events, filters, onExportReport }) {
+  const { t, language, setLanguage, getChannelLabel } = useLanguage();
   const { contentTheme, toggleContentTheme } = useTheme();
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const caseNumber = 'INV-2026-8891';
+
+  const handleExportReport = () => {
+    if (onExportReport) {
+      onExportReport();
+    } else {
+      exportReport(events, filters, caseNumber, t, getChannelLabel);
+    }
+  };
 
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
@@ -79,7 +89,14 @@ function Header() {
           )}
         </div>
         
-        <button className={`px-4 py-2 border rounded-lg text-sm font-medium flex items-center transition-colors ${buttonBg}`}>
+        <button
+          onClick={handleExportReport}
+          className={`px-4 py-2 rounded-lg text-sm font-semibold flex items-center shadow-md transition-all transform hover:scale-105 ${
+            contentTheme === 'dark'
+              ? 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white border border-teal-500/30'
+              : 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white border border-teal-400/30'
+          }`}
+        >
           <Download className="w-4 h-4 mr-2" /> {t('header.exportReport')}
         </button>
         <button className="px-4 py-2 bg-indigo-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-indigo-700 flex items-center shadow-sm transition-colors">
