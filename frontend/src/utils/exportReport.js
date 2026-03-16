@@ -408,14 +408,6 @@ export function downloadPDF(htmlContent, filename) {
         <button class="close-guide" onclick="this.parentElement.remove(); document.body.classList.remove('has-guide'); document.body.style.paddingTop=0;">×</button>
       </div>
       ${htmlContent}
-      <script>
-        window.addEventListener('load', function() {
-          // 1 秒后自动打开打印对话框
-          setTimeout(function() {
-            window.print();
-          }, 800);
-        });
-      <\/script>
     </body>
     </html>
   `;
