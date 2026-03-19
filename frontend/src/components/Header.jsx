@@ -27,7 +27,6 @@ function Header({ events, filters, onExportReport }) {
   const headerBg = contentTheme === 'dark' ? 'bg-slate-800' : 'bg-slate-200';
   const headerBorder = contentTheme === 'dark' ? 'border-slate-700' : 'border-slate-300';
   const textColor = contentTheme === 'dark' ? 'text-slate-200' : 'text-slate-800';
-  const textMuted = contentTheme === 'dark' ? 'text-slate-400' : 'text-slate-600';
   const buttonBg = contentTheme === 'dark' ? 'bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600' : 'bg-slate-100 border-slate-400 text-slate-700 hover:bg-slate-200';
   const badgeBg = contentTheme === 'dark' ? 'bg-rose-900/50 text-rose-300 border-rose-700' : 'bg-rose-200 text-rose-800 border-rose-300';
 
@@ -132,13 +131,14 @@ const thirdRowFields = fieldKeys.slice(10);
 function TriggerEventBanner({ filters }) {
   const { t } = useLanguage();
   const { contentTheme } = useTheme();
-  const [trades, setTrades] = useState([]);
+  const [filteredTrades, setFilteredTrades] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const fetchTrades = async () => {
       if (!filters.tradeNumber) {
-        setTrades([]);
+        setFilteredTrades([]);
         setLoading(false);
         return;
       }
@@ -148,7 +148,7 @@ function TriggerEventBanner({ filters }) {
         const response = await tradesApi.getAll({
           tradeNumber: filters.tradeNumber,
         });
-        setTrades(response.data.trades);
+        setFilteredTrades(response.data.trades);
       } catch (error) {
         console.error('Error fetching trades:', error);
       } finally {
@@ -163,7 +163,6 @@ function TriggerEventBanner({ filters }) {
   const cardBg = contentTheme === 'dark' ? 'bg-slate-700' : 'bg-slate-100';
   const textColor = contentTheme === 'dark' ? 'text-slate-200' : 'text-slate-800';
   const labelColor = contentTheme === 'dark' ? 'text-slate-400' : 'text-slate-600';
-  const separatorColor = contentTheme === 'dark' ? 'text-slate-500' : 'text-slate-400';
 
   const renderFieldItem = (fieldKey, trade) => (
     <div key={fieldKey} className="flex items-center whitespace-nowrap min-w-0">
@@ -184,24 +183,35 @@ function TriggerEventBanner({ filters }) {
 
   return (
     <div className={`${bannerBg} px-8 py-4 border-b`}>
-      <div className={`${cardBg} rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4`}>
+      <div 
+        className={`${cardBg} rounded-xl border-l-4 border-l-indigo-500 shadow-sm p-4 cursor-pointer`}
+        onClick={() => setExpanded(!expanded)}
+      >
         {loading ? (
           <div className="text-sm text-slate-400">加载中...</div>
         ) : !filters.tradeNumber ? (
           <div className="space-y-2">
             {renderRow(firstRowFields, null, 0)}
-            {renderRow(secondRowFields, null, 1)}
-            {renderRow(thirdRowFields, null, 2)}
+            {expanded && (
+              <>
+                {renderRow(secondRowFields, null, 1)}
+                {renderRow(thirdRowFields, null, 2)}
+              </>
+            )}
           </div>
-        ) : trades.length === 0 ? (
+        ) : filteredTrades.length === 0 ? (
           <div className="text-sm text-slate-400">没有符合的交易数据</div>
         ) : (
           <div className="space-y-2">
-            {trades.map((trade, tradeIndex) => (
+            {filteredTrades.map((trade, tradeIndex) => (
               <div key={trade.tradeNumber || tradeIndex} className="space-y-2">
                 {renderRow(firstRowFields, trade, 0)}
-                {renderRow(secondRowFields, trade, 1)}
-                {renderRow(thirdRowFields, trade, 2)}
+                {expanded && (
+                  <>
+                    {renderRow(secondRowFields, trade, 1)}
+                    {renderRow(thirdRowFields, trade, 2)}
+                  </>
+                )}
               </div>
             ))}
           </div>

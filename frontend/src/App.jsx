@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Timeline from './components/Timeline';
+import HorizontalTimeline from './components/HorizontalTimeline';
 import { Header, TriggerEventBanner } from './components/Header';
 import { eventsApi, riskLevelsApi, tradesApi } from './api';
 import { useTheme } from './contexts/ThemeContext';
@@ -11,6 +12,7 @@ function App() {
   const { contentTheme } = useTheme();
   const { t, getChannelLabel } = useLanguage();
   const [events, setEvents] = useState([]);
+  const [allPositionEvents, setAllPositionEvents] = useState([]); // 用于时间轴位置基准的所有高中风险事件
   const [loading, setLoading] = useState(true);
   const [riskStats, setRiskStats] = useState({ stats: { high: 0, medium: 0, low: 0 }, total: 0 });
   const [trades, setTrades] = useState([]);
@@ -20,7 +22,7 @@ function App() {
     riskLevels: ['high', 'medium', 'low'],
     channels: ['phone', 'bt', 'qtrade', 'ideal', 'reuters', 'email', 'bloomberg'],
     tradeNumber: '',
-    scoreThreshold: 0,
+    scoreThreshold: 30,
   });
 
   const handleExportReport = () => {
@@ -39,6 +41,30 @@ function App() {
 
     fetchTrades();
   }, []);
+
+  // 获取所有事件（用于时间轴位置基准）- 只在 tradeNumber 改变时更新
+  useEffect(() => {
+    const fetchAllPositionEvents = async () => {
+      if (!filters.tradeNumber) {
+        setAllPositionEvents([]);
+        return;
+      }
+      
+      try {
+        const response = await eventsApi.getAll({
+          tradeNumber: filters.tradeNumber,
+          riskLevels: 'high,medium,low', // 包含所有风险等级
+          channels: 'phone,bt,qtrade,ideal,reuters,email,bloomberg',
+          scoreThreshold: 0,
+        });
+        setAllPositionEvents(response.data.events);
+      } catch (error) {
+        console.error('Error fetching all position events:', error);
+      }
+    };
+
+    fetchAllPositionEvents();
+  }, [filters.tradeNumber]);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -103,6 +129,7 @@ function App() {
       <main className={`flex-1 flex flex-col h-full relative ${contentTheme === 'dark' ? 'bg-slate-900' : 'bg-slate-200'}`}>
         <Header events={events} filters={filters} onExportReport={handleExportReport} />
         <TriggerEventBanner filters={filters} />
+        <HorizontalTimeline events={events} allPositionEvents={allPositionEvents} trades={trades} filters={filters} />
         <Timeline events={events} loading={loading} contentTheme={contentTheme} />
       </main>
     </div>

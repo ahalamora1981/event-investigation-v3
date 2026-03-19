@@ -2,7 +2,7 @@ export const translations = {
   zh: {
     app: {
       title: 'ESUN CCS',
-      subtitle: '合规与监控',
+      subtitle: '监控与调查',
     },
     header: {
       activeInvestigation: '活跃调查',
@@ -115,7 +115,7 @@ export const translations = {
   en: {
     app: {
       title: 'ESUN CCS',
-      subtitle: 'Compliance & Surveillance',
+      subtitle: 'Surveillance & Investigation',
     },
     header: {
       activeInvestigation: 'Active Investigation',
